@@ -1,21 +1,21 @@
 package DAO;
 
 import model.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//user dao
-public class UserDAO {
+public class userDAOJdbc {
     private Connection connection;
 
-    public UserDAO(Connection connection) {
+    public userDAOJdbc(Connection connection) {
         this.connection = connection;
     }
-    public List<User> getAllBankClient() throws SQLException {
+
+    public List<User> getAllUsers() throws SQLException {
         List<User> list = new ArrayList<>();
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from bank_client");
+        PreparedStatement preparedStatement = connection.
+                prepareStatement("select * from user_table");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             long id = resultSet.getLong("id");
@@ -29,10 +29,19 @@ public class UserDAO {
         preparedStatement.close();
         return list;
     }
+    public void userEdit(User user) throws SQLException{
+        PreparedStatement preparedStatement = connection.
+                prepareStatement("INSERT INTO user_table (name, password, email) Values (?, ?, ?)");
+        preparedStatement.setString(1, user.getName());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getEmail());
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+    }
 
-    public boolean validateClient(String name, String password) {
+    public boolean validateUser(String name, String password) {
         try {
-            User user = getClientByName(name);
+            User user = getUserByName(name);
             if (user.getPassword().equals(password)) {
                 return true;
             }
@@ -42,8 +51,9 @@ public class UserDAO {
         return false;
     }
 
-    public User getClientById(long id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM bank_client WHERE id = ?");
+    public User getUserById(Long id) throws SQLException {
+        PreparedStatement preparedStatement = connection.
+                prepareStatement("SELECT * FROM user_table WHERE id = ?");
         preparedStatement.setLong(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -55,19 +65,9 @@ public class UserDAO {
         return new User(name, password, email);
     }
 
-    public long getClientIdByName(String name) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM bank_client WHERE name = ?");
-        preparedStatement.setString(1, name);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        Long id = resultSet.getLong("id");
-        resultSet.close();
-        preparedStatement.close();
-        return id;
-    }
-
-    public User getClientByName(String name) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("select * from bank_client where name = ?");
+    public User getUserByName(String name) throws SQLException {
+        PreparedStatement preparedStatement = connection.
+                prepareStatement("select * from user_table where name = ?");
         preparedStatement.setString(1, name);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -79,8 +79,9 @@ public class UserDAO {
         return new User(names, password, email);
     }
 
-    public void addClient(User user) throws SQLException {
-        String sql = "INSERT INTO bank_client (name, password) Values (?, ?, ?)";
+    public void addUser(User user) throws SQLException {
+        createTable();
+        String sql = "INSERT INTO user_table (name, password, email) Values (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, user.getName());
         preparedStatement.setString(2, user.getPassword());
@@ -91,7 +92,7 @@ public class UserDAO {
 
     public void createTable() throws SQLException {
         Statement stmt = connection.createStatement();
-        stmt.execute("create table if not exists bank_client (id bigint auto_increment, name varchar(256), password varchar(256), money bigint, primary key (id))");
+        stmt.execute("create table if not exists user_table (id bigint auto_increment, name varchar(256), password varchar(256), email varchar(256), primary key (id))");
         stmt.close();
     }
 
@@ -99,5 +100,13 @@ public class UserDAO {
         Statement stmt = connection.createStatement();
         stmt.executeUpdate("DROP TABLE IF EXISTS bank_client");
         stmt.close();
+    }
+
+    public void deleteUser(long id) throws SQLException {
+        PreparedStatement preparedStatement = connection.
+                prepareStatement("DELETE FROM user_table WHERE id=?");
+        preparedStatement.setLong(1, id);
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
     }
 }

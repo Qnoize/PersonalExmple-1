@@ -1,6 +1,6 @@
 package service;
 
-import DAO.UserDAO;
+import DAO.userDAOJdbc;
 import exception.DBException;
 import model.User;
 
@@ -10,30 +10,30 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserService {
+public class UserRepository {
 
-    public User getClientById(long id) throws DBException {
+    public User getUserById(long id) throws DBException {
         try {
-            return getUserDAO().getClientById(id);
+            return getUserDAO().getUserById(id);
         } catch (SQLException e) {
             throw new DBException(e);
         }
     }
 
-    public User getClientByName(String name) {
+    public User getUserByName(String name) {
         User client = null;
         try {
-            client = getUserDAO().getClientByName(name);
+            client = getUserDAO().getUserByName(name);
         } catch (SQLException e) {
             e.getStackTrace();
         }
         return client;
     }
 
-    public List<User> getAllClient() {
+    public List<User> getAllUsers() {
         List<User> list = null;
         try {
-            list = getUserDAO().getAllBankClient();
+            list = getUserDAO().getAllUsers();
         }
         catch (SQLException e) {
             e.getStackTrace();
@@ -41,33 +41,35 @@ public class UserService {
         return list;
     }
 
-
-    public boolean deleteClient(String name) {
-        return false;
+    public void userEdit(User user) throws SQLException {
+        getUserDAO().userEdit(user);
+    }
+    public void deleteUser(long id) throws SQLException {
+        getUserDAO().deleteUser(id);
     }
 
-    public void addClient(User client) throws  SQLException {
-        if (!clientExist(client.getName())) {
-            getUserDAO().addClient(client);
+    public void addUser(User user) throws  SQLException {
+        if (!userExist(user.getName())) {
+            getUserDAO().addUser(user);
         }
     }
 
-    public boolean clientExist(String name) throws SQLException {
-        if (getClientByName(name)!= null) {
+    public boolean userExist(String name) throws SQLException {
+        if (getUserByName(name)!= null) {
             return true;
         }
         return false;
     }
 
-    public boolean clientExist(String name, String password) {
-        if (getUserDAO().validateClient(name, password)) {
+    public boolean userExist(String name, String password) {
+        if (getUserDAO().validateUser(name, password)) {
             return true;
         }
         return false;
     }
 
     public void cleanUp() throws DBException {
-        UserDAO dao = getUserDAO();
+        userDAOJdbc dao = getUserDAO();
         try {
             dao.dropTable();
         } catch (SQLException e) {
@@ -75,13 +77,14 @@ public class UserService {
         }
     }
     public void createTable() throws DBException{
-        UserDAO dao = getUserDAO();
+        userDAOJdbc dao = getUserDAO();
         try {
             dao.createTable();
         } catch (SQLException e) {
             throw new DBException(e);
         }
     }
+
     private static Connection getMysqlConnection() {
         try {
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
@@ -89,13 +92,13 @@ public class UserService {
             StringBuilder url = new StringBuilder();
 
             url.
-                    append("jdbc:mysql://").        //db type
-                    append("localhost:").           //host name
-                    append("3306/").                //port
-                    append("db_example?").          //db name
-                    append("user=root&").          //login
-                    append("password=root").       //password
-                    append("&serverTimezone=UTC");   //setup server time
+                    append("jdbc:mysql://").
+                    append("localhost:").
+                    append("3306/").
+                    append("db_example?").
+                    append("user=root&").
+                    append("password=root").
+                    append("&serverTimezone=UTC");
 
             System.out.println("URL: " + url + "\n");
 
@@ -107,7 +110,7 @@ public class UserService {
         }
     }
 
-    private static UserDAO getUserDAO() {
-        return new UserDAO(getMysqlConnection());
+    public static userDAOJdbc getUserDAO() {
+        return new userDAOJdbc(getMysqlConnection());
     }
 }
