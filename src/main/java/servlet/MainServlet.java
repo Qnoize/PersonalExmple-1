@@ -17,35 +17,52 @@ import java.util.List;
 public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserRepository userRepository = new UserRepository();
+        UserRepository userRepository = UserRepository.getInstance();
         List<User> users = userRepository.getAllUsers();
-        req.setAttribute("listU", users);
+        req.setAttribute("list", users);
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/signUp.jsp");
         dispatcher.forward(req, resp);
-        long id = Long.parseLong(req.getParameter("id"));
+
+        resp.setContentType("text/html");
+        Long id = null;
+        try {
+            id = Long.parseLong(req.getParameter("id"));
+        } catch (Exception e){
+            resp.sendRedirect("http://localhost:8080/");
+        }
         String delete = req.getParameter("delete");
-        if (delete != null){
+
+        if (delete != null && id != null) {
+            User user = null;
             try {
-                userRepository.deleteUser(id);
-            } catch (SQLException e) {
+                user = userRepository.getUserById(id);
+            } catch (DBException e) {
+                e.printStackTrace();
+            }
+            if (user != null) {
+                try {
+                    userRepository.deleteUser(id);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        String edit = req.getParameter("edit");
+
+        if (edit != null && id != null) {
+            User user = null;
+            try {
+                user = userRepository.getUserById(id);
+                req.setAttribute("user", user);
+            } catch (DBException e) {
                 e.printStackTrace();
             }
         }
 
-        String edit = req.getParameter("edit");
-        if(edit != null){
-            try {
-                User user = userRepository.getUserById(id);
-                req.setAttribute("listE", user);
-                userRepository.userEdit(user);
-                }
-                 catch (DBException e) {
-                    e.printStackTrace();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-         }
+        List<User> list = userRepository.getAllUsers();
 
+        req.setAttribute("list", list);
+        req.getRequestDispatcher("/jsp/signUp.jsp").forward(req, resp);
     }
 
     @Override
@@ -53,10 +70,9 @@ public class MainServlet extends HttpServlet {
         String name = req.getParameter("name");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
-
-        if (!name.equals("")&& !pass.equals("") && !email.equals("")) {
+        if (!name.equals("")&& !pass.equals("")) {
             User user = new User(name, pass, email);
-            UserRepository userRepository = new UserRepository();
+            UserRepository userRepository = UserRepository.getInstance();
             try {
                 if (!userRepository.userExist(name)) {
                     try {
@@ -71,8 +87,7 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 doGet(req, resp);
             }
-        } else {
-            doGet(req, resp);
         }
+        doGet(req, resp);
     }
 }

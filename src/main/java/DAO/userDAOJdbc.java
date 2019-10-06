@@ -31,7 +31,8 @@ public class userDAOJdbc {
     }
     public void userEdit(User user) throws SQLException{
         PreparedStatement preparedStatement = connection.
-                prepareStatement("INSERT INTO user_table (name, password, email) Values (?, ?, ?)");
+                prepareStatement("UPDATE user_table SET name=?, password=?, email=? where id=? ");
+        preparedStatement.setLong(4, user.getId());
         preparedStatement.setString(1, user.getName());
         preparedStatement.setString(2, user.getPassword());
         preparedStatement.setString(3, user.getEmail());
@@ -62,7 +63,7 @@ public class userDAOJdbc {
         String email = resultSet.getString("email");
         resultSet.close();
         preparedStatement.close();
-        return new User(name, password, email);
+        return new User(id, name, password, email);
     }
 
     public User getUserByName(String name) throws SQLException {

@@ -5,50 +5,44 @@
     <title>Title</title>
 </head>
 <body>
+<form method="POST">
+    <p><b>Add user</b></p>
 
-<h2>Data base</h2><br/>
-
-<div class="form-style-2">
-    <div class="form-style-2-heading">
-        Add new user:
-    </div><br>
-    <form method="post" action="/" items="${requestScope.listE}" var="userEdit">
-    <table>
+    <table width="100%" cellspacing="0" cellpadding="4">
         <tr>
-            <td>User name</td><td><input class="input-field" type="text" id="name" name="name" value="${listE.name}"><br></td>
+            <td align="right" width="100">Name</td>
+            <td><input type="text" name="name"></td>
         </tr>
         <tr>
-            <td>Password</td><td><input class="input-field" type="password" id="password" name="password" value="${listE.password}"><br></td>
+            <td align="right">Password</td>
+            <td><input type="password" name="password"></td>
         </tr>
         <tr>
-            <td>User e-mail</td><td><input class="input-field" type="text" id="email" name="email" value="${listE.email}"><br></td>
+            <td align="right">Email</td>
+            <td><input type="text" name="email"></td>
         </tr>
     </table>
-        <input type="submit" value="Enter">
-        <input type="hidden" name="id" value="${userEdit.id}">
-    </form>
-</div>
+    <input type="submit" value="Confirm" name="Ok"><br>
+</form>
 
 <table table border="1" cellspacing="0" cellpadding="2">
     <tr>
         <th>Id</th>
-        <th>name</th>
-        <th>password</th>
-        <th>email</th>
-        <th>action</th>
+        <th>Name</th>
+        <th>Password</th>
+        <th>Email</th>
     </tr>
-    <c:forEach items="${requestScope.listU}" var="user">
+    <c:forEach items="${requestScope.list}" var="user">
         <tr>
             <td> ${user.id} </td>
             <td> ${user.name} </td>
-            <td> ${user.password} </td>
             <td> ${user.email} </td>
             <td>
-                <form action="/jsp/edit.jsp">
+                <form method="GET" action="/edit">
                     <input type="submit" value="Edit" name="edit">
                     <input type="hidden" name="id" value="${user.id}">
                 </form>
-                <form method="get">
+                <form method="GET">
                     <input type="submit" value="Delete" name="delete">
                     <input type="hidden" name="id" value="${user.id}">
                 </form>
@@ -56,7 +50,6 @@
         </tr>
     </c:forEach>
 </table>
-
 
 </body>
 
