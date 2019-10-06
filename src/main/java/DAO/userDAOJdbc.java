@@ -5,11 +5,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class userDAOJdbc {
+public class userDAOJdbc implements DAO{
+    private static userDAOJdbc instance;
     private Connection connection;
 
     public userDAOJdbc(Connection connection) {
         this.connection = connection;
+    }
+    static userDAOJdbc getInstance(Connection connection){
+        if(instance == null){
+            instance = new userDAOJdbc(connection);
+        }
+        return instance;
     }
 
     public List<User> getAllUsers() throws SQLException {
@@ -52,7 +59,7 @@ public class userDAOJdbc {
         return false;
     }
 
-    public User getUserById(Long id) throws SQLException {
+    public User getUserById(long id) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("SELECT * FROM user_table WHERE id = ?");
         preparedStatement.setLong(1, id);
@@ -91,15 +98,14 @@ public class userDAOJdbc {
         preparedStatement.close();
     }
 
+    @Override
+    public boolean userExist(String name) throws SQLException {
+        return false;
+    }
+
     public void createTable() throws SQLException {
         Statement stmt = connection.createStatement();
         stmt.execute("create table if not exists user_table (id bigint auto_increment, name varchar(256), password varchar(256), email varchar(256), primary key (id))");
-        stmt.close();
-    }
-
-    public void dropTable() throws SQLException {
-        Statement stmt = connection.createStatement();
-        stmt.executeUpdate("DROP TABLE IF EXISTS bank_client");
         stmt.close();
     }
 
