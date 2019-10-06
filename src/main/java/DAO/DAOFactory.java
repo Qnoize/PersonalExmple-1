@@ -2,7 +2,7 @@ package DAO;
 
 public class DAOFactory {
     private static DAOFactory instance;
-    private static DAO dao;
+    private static DAOService dao;
 
     private DAOFactory() {
     }
@@ -14,7 +14,7 @@ public class DAOFactory {
         return instance;
     }
 
-    public DAO getDAO() {
+    public DAOService getDAO() {
          return dao;
     }
 }

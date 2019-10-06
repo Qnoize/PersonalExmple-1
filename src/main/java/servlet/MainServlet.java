@@ -1,7 +1,6 @@
 package servlet;
 
-import DAO.DAO;
-import exception.DBException;
+import DAO.DAOService;
 import model.User;
 import service.UserRepository;
 import javax.servlet.RequestDispatcher;
@@ -16,7 +15,8 @@ import java.util.List;
 
 @WebServlet("/")
 public class MainServlet extends HttpServlet {
-    private DAO dao;
+
+    private DAOService dao;
     @Override
     public void init() throws ServletException {
         this.dao = new UserRepository();
@@ -24,16 +24,10 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<User> users = null;
-        try {
-            users = dao.getAllUsers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        List<User> users = dao.getAllUsers();
         req.setAttribute("list", users);
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/signUp.jsp");
         dispatcher.forward(req, resp);
-
         resp.setContentType("text/html");
         Long id = null;
         try {
@@ -42,41 +36,20 @@ public class MainServlet extends HttpServlet {
             dispatcher.forward(req, resp);
         }
         String delete = req.getParameter("delete");
-
         if (delete != null && id != null) {
             User user = null;
-            try {
-                user = dao.getUserById(id);
-            } catch (DBException | SQLException e) {
-                e.printStackTrace();
-            }
+            user = dao.getUserById(id);
             if (user != null) {
-                try {
-                    dao.deleteUser(id);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                dao.deleteUser(id);
             }
         }
         String edit = req.getParameter("edit");
-
         if (edit != null && id != null) {
             User user = null;
-            try {
-                user = dao.getUserById(id);
-                req.setAttribute("user", user);
-            } catch (DBException | SQLException e) {
-                e.printStackTrace();
-            }
+            user = dao.getUserById(id);
+            req.setAttribute("user", user);
         }
-
-        List<User> list = null;
-        try {
-            list = dao.getAllUsers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        List<User> list = dao.getAllUsers();
         req.setAttribute("list", list);
         req.getRequestDispatcher("/jsp/signUp.jsp").forward(req, resp);
     }
@@ -88,18 +61,10 @@ public class MainServlet extends HttpServlet {
         String email = req.getParameter("email");
         if (!name.equals("")&& !pass.equals("")) {
             User user = new User(name, pass, email);
-            try {
-                if (!dao.userExist(name)) {
-                    try {
-                        dao.addUser(user);
-                    } catch (SQLException e) {
-                        doGet(req, resp);
-                    }
-                    doGet(req, resp);
-                } else {
-                    doGet(req, resp);
-                }
-            } catch (SQLException e) {
+            if (!dao.userExist(name)) {
+                dao.addUser(user);
+                doGet(req, resp);
+            } else {
                 doGet(req, resp);
             }
         }

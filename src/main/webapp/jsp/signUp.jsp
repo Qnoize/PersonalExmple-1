@@ -7,7 +7,6 @@
 <body>
 <form method="POST">
     <p><b>Add user</b></p>
-
     <table width="100%" cellspacing="0" cellpadding="4">
         <tr>
             <td align="right" width="100">Name</td>

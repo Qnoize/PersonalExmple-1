@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class userDAOJdbc implements DAO{
+public class userDAOJdbc {
     private static userDAOJdbc instance;
     private Connection connection;
 
@@ -36,7 +36,7 @@ public class userDAOJdbc implements DAO{
         preparedStatement.close();
         return list;
     }
-    public void userEdit(User user) throws SQLException{
+    public void userEdit(User user) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("UPDATE user_table SET name=?, password=?, email=? where id=? ");
         preparedStatement.setLong(4, user.getId());
@@ -98,7 +98,6 @@ public class userDAOJdbc implements DAO{
         preparedStatement.close();
     }
 
-    @Override
     public boolean userExist(String name) throws SQLException {
         return false;
     }

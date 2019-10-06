@@ -1,7 +1,6 @@
 package util;
 
 import DAO.userDAOJdbc;
-
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -11,7 +10,6 @@ public class DBHelper {
     private static Connection getMysqlConnection() {
         try {
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
-
             StringBuilder url = new StringBuilder();
 
             url.
@@ -22,8 +20,6 @@ public class DBHelper {
                     append("user=root&").
                     append("password=root").
                     append("&serverTimezone=UTC");
-
-            System.out.println("URL: " + url + "\n");
 
             Connection connection = DriverManager.getConnection(url.toString());
             return connection;

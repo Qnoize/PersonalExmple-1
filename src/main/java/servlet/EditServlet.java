@@ -1,7 +1,6 @@
 package servlet;
 
-import DAO.DAO;
-import exception.DBException;
+import DAO.DAOService;
 import model.User;
 import service.UserRepository;
 import javax.servlet.RequestDispatcher;
@@ -15,7 +14,7 @@ import java.sql.SQLException;
 
 @WebServlet("/edit")
 public class EditServlet extends HttpServlet {
-    private DAO dao;
+    private DAOService dao;
     @Override
     public void init() throws ServletException {
         this.dao = new UserRepository();
@@ -30,15 +29,10 @@ public class EditServlet extends HttpServlet {
             dispatcher.forward(req, resp);
         }
         String edit = req.getParameter("edit");
-
         if (edit != null && id != null) {
             User user = null;
-            try {
-                user = dao.getUserById(id);
-                req.setAttribute("user", user);
-            } catch (DBException | SQLException e) {
-                e.printStackTrace();
-            }
+            user = dao.getUserById(id);
+            req.setAttribute("user", user);
         }
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
         dispatcher.forward(req, resp);
@@ -56,13 +50,8 @@ public class EditServlet extends HttpServlet {
         String name = req.getParameter("name");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
-
         User user = new User(id, name, pass, email);
-        try {
-            dao.userEdit(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao.userEdit(user);
         resp.sendRedirect("http://localhost:8080/");
     }
 }
