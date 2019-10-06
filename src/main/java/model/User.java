@@ -66,9 +66,7 @@ public class User {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, password, email);
-    }
+    public int hashCode() {return Objects.hash(name, password, email);}
 
     @Override
     public String toString() {

@@ -14,9 +14,8 @@ import java.io.IOException;
 public class DeleteServlet extends HttpServlet {
     private UserService userService;
     @Override
-    public void init() throws ServletException {
-        this.userService = UserServiceImpl.getInstance();
-    }
+    public void init() throws ServletException { this.userService = UserServiceImpl.getInstance(); }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/signUp.jsp");

@@ -1,14 +1,12 @@
 package service;
 
-import DAO.DAOService;
+import DAO.UserDao;
 import model.User;
 import util.DBHelper;
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-
-    private static DAOService dao = DBHelper.getUserDAO();
+    private static UserDao dao = DBHelper.getUserDAO();
     private static UserServiceImpl userServiceImpl;
 
     public static UserServiceImpl getInstance(){
@@ -20,63 +18,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long id){
-        try {
-            return dao.getUserById(id);
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
-        return null;
+        return dao.getUserById(id);
     }
 
     @Override
-    public User getUserByName(String name){
-        User client = null;
-        try {
-            client = dao.getUserByName(name);
-        } catch (SQLException e) {
-            e.getStackTrace();
-        }
-        return client;
+    public boolean getUserByName(String name){
+        return dao.getUserByName(name);
     }
+
     @Override
     public List<User> getAllUsers(){
-        List<User> list = null;
-        try {
-            list = dao.getAllUsers();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return dao.getAllUsers();
     }
+
     @Override
     public void userEdit(User user){
-        try {
-            dao.userEdit(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao.userEdit(user);
     }
+
     @Override
-    public void deleteUser(long id) {
-        try {
-            dao.deleteUser(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public void deleteUser(long id) { dao.deleteUser(id); }
+
     @Override
     public void addUser(User user){
-        try {
-            if (!userExist(user.getName())) {
-                dao.addUser(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+       if (userExist(user.getName())){
+            dao.addUser(user);
+       }
     }
-    @Override
+
     public boolean userExist(String name) {
-        if (getUserByName(name)!= null) {
+        if (getUserByName(name)) {
             return true;
         }
         return false;

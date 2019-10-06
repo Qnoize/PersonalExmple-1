@@ -1,6 +1,6 @@
 package util;
 
-import DAO.userDAOJdbc;
+import DAO.UserDaoImpl;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -28,7 +28,5 @@ public class DBHelper {
             throw new IllegalStateException();
         }
     }
-    public static userDAOJdbc getUserDAO() {
-        return new userDAOJdbc(getMysqlConnection());
-    }
+    public static UserDaoImpl getUserDAO() {return new UserDaoImpl(getMysqlConnection());}
 }

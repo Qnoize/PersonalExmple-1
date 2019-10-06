@@ -16,9 +16,8 @@ public class EditServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {
-        this.userService = UserServiceImpl.getInstance();
-    }
+    public void init() throws ServletException { this.userService = UserServiceImpl.getInstance(); }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = null;

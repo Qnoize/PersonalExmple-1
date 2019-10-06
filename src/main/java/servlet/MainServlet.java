@@ -17,9 +17,7 @@ public class MainServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {
-        this.userService = UserServiceImpl.getInstance();
-    }
+    public void init() throws ServletException {this.userService = UserServiceImpl.getInstance();}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,12 +38,8 @@ public class MainServlet extends HttpServlet {
         String email = req.getParameter("email");
         if (!name.equals("")&& !pass.equals("")) {
             User user = new User(name, pass, email);
-            if (!userService.userExist(name)) {
-                userService.addUser(user);
-                doGet(req, resp);
-            } else {
-                doGet(req, resp);
-            }
+            userService.addUser(user);
+            doGet(req, resp);
         }
         doGet(req, resp);
     }
