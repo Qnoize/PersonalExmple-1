@@ -28,7 +28,6 @@ public class DBHelper {
             throw new IllegalStateException();
         }
     }
-
     public static userDAOJdbc getUserDAO() {
         return new userDAOJdbc(getMysqlConnection());
     }

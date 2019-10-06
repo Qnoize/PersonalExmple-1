@@ -41,7 +41,7 @@
                     <input type="submit" value="Edit" name="edit">
                     <input type="hidden" name="id" value="${user.id}">
                 </form>
-                <form method="GET">
+                <form method="GET" action="/delete">
                     <input type="submit" value="Delete" name="delete">
                     <input type="hidden" name="id" value="${user.id}">
                 </form>

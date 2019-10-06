@@ -5,20 +5,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class userDAOJdbc {
-    private static userDAOJdbc instance;
+public class userDAOJdbc implements DAOService{
     private Connection connection;
 
     public userDAOJdbc(Connection connection) {
         this.connection = connection;
     }
-    static userDAOJdbc getInstance(Connection connection){
-        if(instance == null){
-            instance = new userDAOJdbc(connection);
-        }
-        return instance;
-    }
 
+    @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> list = new ArrayList<>();
         PreparedStatement preparedStatement = connection.
@@ -36,6 +30,7 @@ public class userDAOJdbc {
         preparedStatement.close();
         return list;
     }
+    @Override
     public void userEdit(User user) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("UPDATE user_table SET name=?, password=?, email=? where id=? ");
@@ -46,19 +41,7 @@ public class userDAOJdbc {
         preparedStatement.executeUpdate();
         preparedStatement.close();
     }
-
-    public boolean validateUser(String name, String password) {
-        try {
-            User user = getUserByName(name);
-            if (user.getPassword().equals(password)) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
+    @Override
     public User getUserById(long id) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("SELECT * FROM user_table WHERE id = ?");
@@ -72,7 +55,7 @@ public class userDAOJdbc {
         preparedStatement.close();
         return new User(id, name, password, email);
     }
-
+    @Override
     public User getUserByName(String name) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("select * from user_table where name = ?");
@@ -86,7 +69,7 @@ public class userDAOJdbc {
         preparedStatement.close();
         return new User(names, password, email);
     }
-
+    @Override
     public void addUser(User user) throws SQLException {
         createTable();
         String sql = "INSERT INTO user_table (name, password, email) Values (?, ?, ?)";
@@ -97,17 +80,12 @@ public class userDAOJdbc {
         preparedStatement.executeUpdate();
         preparedStatement.close();
     }
-
-    public boolean userExist(String name) throws SQLException {
-        return false;
-    }
-
     public void createTable() throws SQLException {
         Statement stmt = connection.createStatement();
         stmt.execute("create table if not exists user_table (id bigint auto_increment, name varchar(256), password varchar(256), email varchar(256), primary key (id))");
         stmt.close();
     }
-
+    @Override
     public void deleteUser(long id) throws SQLException {
         PreparedStatement preparedStatement = connection.
                 prepareStatement("DELETE FROM user_table WHERE id=?");

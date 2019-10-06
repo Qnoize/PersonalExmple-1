@@ -5,12 +5,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DAOService {
-    User getUserById(long id);
-    User getUserByName(String name);
-    List<User> getAllUsers();
-    void userEdit(User user);
-    void deleteUser(long id);
-    void addUser(User user);
-    boolean userExist(String name);
-
+    User getUserById(long id) throws SQLException;
+    User getUserByName(String name) throws SQLException;
+    List<User> getAllUsers() throws SQLException;
+    void userEdit(User user) throws SQLException;
+    void deleteUser(long id) throws SQLException;
+    void addUser(User user) throws SQLException;
 }

@@ -6,21 +6,22 @@ import util.DBHelper;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserRepository implements DAOService {
-    private static DAOService dao;
-    private static UserRepository userRepository;
+public class UserServiceImpl implements UserService {
 
-    public static UserRepository getInstance(){
-        if(userRepository == null){
-            userRepository = new UserRepository();
+    private static DAOService dao = DBHelper.getUserDAO();
+    private static UserServiceImpl userServiceImpl;
+
+    public static UserServiceImpl getInstance(){
+        if(userServiceImpl == null){
+            userServiceImpl = new UserServiceImpl();
         }
-        return userRepository;
+        return userServiceImpl;
     }
 
     @Override
     public User getUserById(long id){
         try {
-            return DBHelper.getUserDAO().getUserById(id);
+            return dao.getUserById(id);
         } catch (SQLException e) {
             e.getStackTrace();
         }
@@ -31,7 +32,7 @@ public class UserRepository implements DAOService {
     public User getUserByName(String name){
         User client = null;
         try {
-            client = DBHelper.getUserDAO().getUserByName(name);
+            client = dao.getUserByName(name);
         } catch (SQLException e) {
             e.getStackTrace();
         }
@@ -41,17 +42,16 @@ public class UserRepository implements DAOService {
     public List<User> getAllUsers(){
         List<User> list = null;
         try {
-            list = DBHelper.getUserDAO().getAllUsers();
-        }
-        catch (SQLException e) {
-            e.getStackTrace();
+            list = dao.getAllUsers();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return list;
     }
     @Override
     public void userEdit(User user){
         try {
-            DBHelper.getUserDAO().userEdit(user);
+            dao.userEdit(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class UserRepository implements DAOService {
     @Override
     public void deleteUser(long id) {
         try {
-            DBHelper.getUserDAO().deleteUser(id);
+            dao.deleteUser(id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,7 +68,7 @@ public class UserRepository implements DAOService {
     public void addUser(User user){
         try {
             if (!userExist(user.getName())) {
-                DBHelper.getUserDAO().addUser(user);
+                dao.addUser(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,5 +81,4 @@ public class UserRepository implements DAOService {
         }
         return false;
     }
-
 }
