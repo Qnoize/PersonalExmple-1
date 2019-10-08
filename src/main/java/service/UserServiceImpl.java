@@ -1,48 +1,52 @@
 package service;
 
 import DAO.UserDao;
+import Factory.AbstractFactory;
 import model.User;
-import util.DBHelper;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private static UserDao dao = DBHelper.getUserDAO();
-    private static UserServiceImpl userServiceImpl;
+    private static UserServiceImpl instance;
+    private static UserDao userDao;
 
-    public static UserServiceImpl getInstance(){
-        if(userServiceImpl == null){
-            userServiceImpl = new UserServiceImpl();
+    private UserServiceImpl() {
+    }
+
+    public static UserService getInstance() {
+        if (instance == null || userDao == null) {
+            instance = new UserServiceImpl();
+            userDao = AbstractFactory.getInstance().getDAO();
         }
-        return userServiceImpl;
+        return instance;
     }
 
     @Override
     public User getUserById(long id){
-        return dao.getUserById(id);
+        return userDao.getUserById(id);
     }
 
     @Override
     public boolean getUserByName(String name){
-        return dao.getUserByName(name);
+        return userDao.getUserByName(name);
     }
 
     @Override
     public List<User> getAllUsers(){
-        return dao.getAllUsers();
+        return userDao.getAllUsers();
     }
 
     @Override
     public void userEdit(User user){
-        dao.userEdit(user);
+        userDao.userEdit(user);
     }
 
     @Override
-    public void deleteUser(long id) { dao.deleteUser(id); }
+    public void deleteUser(long id) { userDao.deleteUser(id); }
 
     @Override
     public void addUser(User user){
        if (userExist(user.getName())){
-            dao.addUser(user);
+           userDao.addUser(user);
        }
     }
 

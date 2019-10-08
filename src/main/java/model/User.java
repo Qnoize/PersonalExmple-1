@@ -1,12 +1,19 @@
 package model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "user_table")
 public class User {
-    private long id;
     private String name;
     private String password;
     private String email;
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     public User() {}
 
@@ -23,11 +30,9 @@ public class User {
         this.email = email;
     }
 
-    public long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

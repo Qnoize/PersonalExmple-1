@@ -1,0 +1,12 @@
+#configuration connect to DB
+connectToDB=Hibernate
+hibernate.connection.driver_class=com.mysql.jdbc.Driver
+hibernate.connection.password=root
+hibernate.connection.username=root
+hibernate.connection.url=jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC
+hibernate.hbm2ddl.auto=create
+hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
+hibernate.show_sql=true
+jdbc.connection.url=jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC
+jdbc.connection.user=root
+jdbc.connection.password=root

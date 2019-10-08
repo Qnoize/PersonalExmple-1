@@ -5,10 +5,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoImplJdbc implements UserDao {
+    private static UserDaoImplJdbc instance;
     private Connection connection;
-    public UserDaoImpl(Connection connection) {
+
+    private UserDaoImplJdbc(Connection connection) {
         this.connection = connection;
+    }
+
+    public static UserDaoImplJdbc getInstance(Connection connection) {
+        if (instance == null) {
+            instance = new UserDaoImplJdbc(connection);
+        }
+        return instance;
     }
 
     @Override
