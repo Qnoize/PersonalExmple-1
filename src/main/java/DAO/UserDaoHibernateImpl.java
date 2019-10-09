@@ -3,8 +3,8 @@ package DAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import model.User;
-import org.hibernate.query.Query;
 
+import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +34,11 @@ public class UserDaoHibernateImpl implements UserDao{
 
     @Override
     public boolean getUserByName(String name) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from User where name = :name");
+        if (query.setParameter("name", name).list().isEmpty()){
+            return true;
+        }
         return false;
     }
 

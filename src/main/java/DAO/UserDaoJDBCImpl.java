@@ -22,6 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers(){
+        createTable();
         List<User> list = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         try {
