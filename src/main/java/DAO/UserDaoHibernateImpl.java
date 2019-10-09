@@ -8,18 +8,18 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImplHibernate implements UserDao{
+public class UserDaoHibernateImpl implements UserDao{
 
-    private static UserDaoImplHibernate instance;
+    private static UserDaoHibernateImpl instance;
     private SessionFactory sessionFactory;
 
-    private UserDaoImplHibernate(SessionFactory sessionFactory) {
+    private UserDaoHibernateImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
-    public static UserDaoImplHibernate getInstance(SessionFactory sessionFactory) {
+    public static UserDaoHibernateImpl getInstance(SessionFactory sessionFactory) {
         if (instance == null) {
-            instance = new UserDaoImplHibernate(sessionFactory);
+            instance = new UserDaoHibernateImpl(sessionFactory);
         }
         return instance;
     }
@@ -41,8 +41,7 @@ public class UserDaoImplHibernate implements UserDao{
     public List<User> getAllUsers() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from User");
-        List<User> list = new ArrayList<>(query.list());
+        List<User> list = new ArrayList<>(session.createQuery("from User").list());
         session.getTransaction().commit();
         session.close();
         return list;

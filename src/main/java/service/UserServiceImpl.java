@@ -1,7 +1,7 @@
 package service;
 
 import DAO.UserDao;
-import Factory.AbstractFactory;
+import DAO.UserDaoFactory;
 import model.User;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     public static UserService getInstance() {
         if (instance == null || userDao == null) {
             instance = new UserServiceImpl();
-            userDao = AbstractFactory.getInstance().getDAO();
+            userDao = UserDaoFactory.getInstance().getDAO();
         }
         return instance;
     }

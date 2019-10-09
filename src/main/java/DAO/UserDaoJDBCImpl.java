@@ -5,17 +5,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImplJdbc implements UserDao {
-    private static UserDaoImplJdbc instance;
+public class UserDaoJDBCImpl implements UserDao {
+    private static UserDaoJDBCImpl instance;
     private Connection connection;
 
-    private UserDaoImplJdbc(Connection connection) {
+    private UserDaoJDBCImpl(Connection connection) {
         this.connection = connection;
     }
 
-    public static UserDaoImplJdbc getInstance(Connection connection) {
+    public static UserDaoJDBCImpl getInstance(Connection connection) {
         if (instance == null) {
-            instance = new UserDaoImplJdbc(connection);
+            instance = new UserDaoJDBCImpl(connection);
         }
         return instance;
     }
