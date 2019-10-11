@@ -31,6 +31,6 @@ public class DeleteServlet extends HttpServlet {
         if (delete != null && id != null) {
             userService.deleteUser(id);
         }
-        resp.sendRedirect("http://localhost:8080/");
+        resp.sendRedirect("/");
     }
 }

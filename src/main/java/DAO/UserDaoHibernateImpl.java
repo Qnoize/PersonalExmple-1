@@ -3,12 +3,11 @@ package DAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import model.User;
-
 import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoHibernateImpl implements UserDao{
+public class UserDaoHibernateImpl implements UserDao {
 
     private static UserDaoHibernateImpl instance;
     private SessionFactory sessionFactory;
@@ -23,19 +22,21 @@ public class UserDaoHibernateImpl implements UserDao{
         }
         return instance;
     }
+    //language=SQL
+    private final String SQL_SELECT_BY_ID = "FROM User WHERE id =:id";
+    //language=SQL
+    private final String SQL_SELECT_BY_NAME = "FROM User WHERE name = :name";
+    //language=SQL
+    private final String SQL_SELECT_ALL = "FROM User";
 
-    @Override
-    public User getUserById(long id) {
+    public User getById(long id) {
         Session session = sessionFactory.openSession();
-        return (User) session.createQuery("from User where id = ?1")
-                .setParameter(1, id)
-                .list().get(0);
+        return session.createQuery(SQL_SELECT_BY_ID, User.class).setParameter("id", id).list().get(0);
     }
 
-    @Override
-    public boolean getUserByName(String name) {
+    public boolean getByName(String name) {
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User where name = :name");
+        Query query = session.createQuery(SQL_SELECT_BY_NAME);
         if (query.setParameter("name", name).list().isEmpty()){
             return true;
         }
@@ -43,38 +44,54 @@ public class UserDaoHibernateImpl implements UserDao{
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        List<User> list = new ArrayList<>(session.createQuery("from User").list());
-        session.getTransaction().commit();
+        List<User> list = new ArrayList<>(session.createQuery(SQL_SELECT_ALL).list());
+        try {
+            session.getTransaction().commit();
+        } catch (Exception e){
+            session.getTransaction().rollback();
+        }
         session.close();
         return list;
     }
 
     @Override
-    public void userEdit(User user) {
+    public void edit(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.update(user);
-        session.getTransaction().commit();
+        try {
+            session.getTransaction().commit();
+        } catch (Exception e){
+            session.getTransaction().rollback();
+        }
         session.close();
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void delete(long id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.delete(getUserById(id));
-        session.getTransaction().commit();
+        session.delete(getById(id));
+        try {
+            session.getTransaction().commit();
+        } catch (Exception e){
+            session.getTransaction().rollback();
+        }
     }
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
-        session.getTransaction().commit();
+        try {
+            session.getTransaction().commit();
+        } catch (Exception e){
+            session.getTransaction().rollback();
+        }
         session.close();
     }
 }

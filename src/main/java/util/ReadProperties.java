@@ -14,7 +14,6 @@ public class ReadProperties {
             Properties properties = new Properties();
             properties.load(stream);
             prop = properties.getProperty(value);
-            System.out.println("// " + prop + " / " + value);
         } catch (IOException e) {
             e.printStackTrace();
         }

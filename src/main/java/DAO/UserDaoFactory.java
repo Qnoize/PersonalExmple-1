@@ -19,12 +19,23 @@ public class UserDaoFactory {
 
     public UserDao getDAO() {
         try {
-            if (ReadProperties.readProperty("connectToDB").equalsIgnoreCase("Hibernate")) {
-                SessionFactory sessionFactory = DBHelper.getSessionFactory();
-                userDao = UserDaoHibernateImpl.getInstance(sessionFactory);
-            } else if (ReadProperties.readProperty("connectToDB").equalsIgnoreCase("JDBC")) {
-                Connection connection = DBHelper.getConnection();
-                userDao = UserDaoJDBCImpl.getInstance(connection);
+            switch (ReadProperties.readProperty("connectToDB")){
+                case ("Hibernate"):
+                    {
+                        SessionFactory sessionFactory = DBHelper.getSessionFactory();
+                        userDao = UserDaoHibernateImpl.getInstance(sessionFactory);
+                        break;
+                    }
+                case ("JDBC"):
+                    {
+                        Connection connection = DBHelper.getConnection();
+                        userDao = UserDaoJDBCImpl.getInstance(connection);
+                    }
+                default:
+                    {
+                        Connection connection = DBHelper.getDefaultConnection();
+                        userDao = UserDaoJDBCImpl.getInstance(connection);
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();

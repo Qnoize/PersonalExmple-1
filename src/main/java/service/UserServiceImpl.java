@@ -22,31 +22,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long id){
-        return userDao.getUserById(id);
+        return userDao.getById(id);
     }
 
     @Override
     public boolean getUserByName(String name){
-        return userDao.getUserByName(name);
+        return userDao.getByName(name);
     }
 
     @Override
     public List<User> getAllUsers(){
-        return userDao.getAllUsers();
+        return userDao.getAll();
     }
 
     @Override
     public void userEdit(User user){
-        userDao.userEdit(user);
+        userDao.edit(user);
     }
 
     @Override
-    public void deleteUser(long id) { userDao.deleteUser(id); }
+    public void deleteUser(long id) { userDao.delete(id); }
 
     @Override
     public void addUser(User user){
        if (userExist(user.getName())){
-           userDao.addUser(user);
+           userDao.add(user);
        }
     }
 

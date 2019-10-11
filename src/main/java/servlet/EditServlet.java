@@ -29,8 +29,7 @@ public class EditServlet extends HttpServlet {
         }
         String edit = req.getParameter("edit");
         if (edit != null && id != null) {
-            User user = null;
-            user = userService.getUserById(id);
+            User user = userService.getUserById(id);
             req.setAttribute("user", user);
         }
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
@@ -51,6 +50,6 @@ public class EditServlet extends HttpServlet {
         String email = req.getParameter("email");
         User user = new User(id, name, pass, email);
         userService.userEdit(user);
-        resp.sendRedirect("http://localhost:8080/");
+        resp.sendRedirect("/");
     }
 }
