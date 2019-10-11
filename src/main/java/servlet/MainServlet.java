@@ -1,8 +1,11 @@
 package servlet;
 
+import DAO.UserDaoFactory;
 import model.User;
 import service.UserService;
 import service.UserServiceImpl;
+import util.ReadProperties;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +24,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("with", UserDaoFactory.daoType);
         List<User> users = userService.getAllUsers();
         req.setAttribute("list", users);
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/signUp.jsp");

@@ -27,13 +27,13 @@ public class UserDaoJDBCImpl implements UserDao {
     //language=SQL
     private final String SQL_SELECT_ALL = "SELECT * FROM user_table";
     //language=SQL
-    private final String SQL_EDIT = "UPDATE user_table SET name=?, password=?, email=? WHERE id=?";
+    private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE id = ?";
     //language=SQL
     private final String SQL_ADD = "INSERT INTO user_table (name, password, email) VALUES (?, ?, ?)";
     //language=SQL
-    private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXIST user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
+    private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXISTS user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
     //language=SQL
-    private final String SQL_DROP_TABLE = "DELETE FROM user_table WHERE id=?";
+    private final String SQL_DROP_TABLE = "DELETE FROM user_table WHERE id = ?";
 
     @Override
     public List<User> getAll(){

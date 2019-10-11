@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+Work with - ${requestScope.with}
 <form method="POST">
     <p><b>Add user</b></p>
     <table width="100%" cellspacing="0" cellpadding="4">
