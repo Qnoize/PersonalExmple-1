@@ -20,7 +20,9 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         Long id = null;
         try {
             id = Long.parseLong(req.getParameter("id"));
@@ -39,7 +41,9 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         Long id = null;
         try {
             id = Long.parseLong(req.getParameter("id"));

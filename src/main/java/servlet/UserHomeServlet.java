@@ -18,14 +18,18 @@ public class UserHomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         if(req.getParameter("login") != null){
             req.getServletContext().getRequestDispatcher("/jsp/loginUser.jsp").forward(req, resp);
         }

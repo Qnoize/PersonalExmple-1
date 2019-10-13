@@ -20,15 +20,18 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {this.userService = UserServiceImpl.getInstance();}
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         req.setAttribute("with", UserDaoFactory.daoType);
         List<User> users = userService.getAllUsers();
         req.setAttribute("list", users);
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminHome.jsp");
         dispatcher.forward(req, resp);
-        resp.setContentType("text/html");
+
         List<User> list = userService.getAllUsers();
         req.setAttribute("list", list);
         req.getRequestDispatcher("/jsp/adminHome.jsp").forward(req, resp);
@@ -36,7 +39,9 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        resp.setContentType("text/html; charset=windows-1251");
+        req.setCharacterEncoding("CP1251");
+
         String name = req.getParameter("login");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");

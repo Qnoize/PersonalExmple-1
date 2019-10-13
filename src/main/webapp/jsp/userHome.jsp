@@ -1,6 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%request.setCharacterEncoding("UTF-8");%>
+<%@ page language="java" contentType="text/html;charset=windows-1251"
+         pageEncoding="windows-1251"%>
 <html>
 <head>
     <title>Title</title>
