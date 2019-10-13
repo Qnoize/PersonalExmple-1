@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CrudDao<T> {
     <T>T getById(long id);
-    boolean getByName(String name);
+    boolean getByName(String name, String password);
     List<T> getAll();
     void delete(long id);
     void edit(T user);

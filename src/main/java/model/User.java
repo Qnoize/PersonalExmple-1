@@ -1,6 +1,5 @@
 package model;
 
-import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,7 +10,6 @@ public class User implements Serializable {
 
     @Id
     @Column(name = "id")
-    @NaturalId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

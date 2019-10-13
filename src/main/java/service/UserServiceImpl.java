@@ -21,14 +21,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(long id){
-        return userDao.getById(id);
-    }
+    public User getUserById(long id){ return userDao.getById(id);}
 
     @Override
-    public boolean getUserByName(String name){
-        return userDao.getByName(name);
-    }
+    public boolean getUserByName(String name, String password){ return userDao.getByName(name, password);}
 
     @Override
     public List<User> getAllUsers(){
@@ -45,15 +41,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user){
-       if (userExist(user.getName())){
+     if (!userExistByName(user.getName())){
            userDao.add(user);
-       }
+      }
     }
+    public boolean userExistByName(String name){ return getByName(name);}
 
-    public boolean userExist(String name) {
-        if (getUserByName(name)) {
-            return true;
-        }
-        return false;
+    private boolean getByName(String name) { return userDao.getByName(name); }
+
+    public boolean userExist(String name, String password) {
+        return getUserByName(name, password);
     }
 }

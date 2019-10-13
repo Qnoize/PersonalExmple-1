@@ -20,6 +20,7 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
         Long id = null;
         try {
             id = Long.parseLong(req.getParameter("id"));
@@ -38,6 +39,7 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
         Long id = null;
         try {
             id = Long.parseLong(req.getParameter("id"));
@@ -45,11 +47,11 @@ public class EditServlet extends HttpServlet {
             RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
             dispatcher.forward(req, resp);
         }
-        String name = req.getParameter("name");
+        String name = req.getParameter("login");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
         User user = new User(id, name, pass, email);
         userService.userEdit(user);
-        resp.sendRedirect("/");
+        resp.sendRedirect("/admin");
     }
 }

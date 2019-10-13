@@ -3,7 +3,6 @@ package DAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import model.User;
-import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +26,29 @@ public class UserDaoHibernateImpl implements UserDao {
     //language=SQL
     private final String SQL_SELECT_BY_NAME = "FROM User WHERE name = :name";
     //language=SQL
+    private final String SQL_SELECT_BY_NAME_AND_PASS = "FROM User WHERE name = :name and password =:password";
+    //language=SQL
     private final String SQL_SELECT_ALL = "FROM User";
 
     public User getById(long id) {
         Session session = sessionFactory.openSession();
-        return session.createQuery(SQL_SELECT_BY_ID, User.class).setParameter("id", id).list().get(0);
+        return session.createQuery(SQL_SELECT_BY_ID, User.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
-    public boolean getByName(String name) {
+    public boolean getByName(String name, String password) {
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery(SQL_SELECT_BY_NAME);
-        if (query.setParameter("name", name).list().isEmpty()){
-            return true;
+        try {
+            User user = session.createQuery(SQL_SELECT_BY_NAME_AND_PASS, User.class)
+                    .setParameter("name", name)
+                    .setParameter("password", password)
+                    .getSingleResult();
+            if(user != null){
+                return true;
+            }
+        } catch (Exception e){
+            e.getStackTrace();
         }
         return false;
     }
@@ -93,5 +103,21 @@ public class UserDaoHibernateImpl implements UserDao {
             session.getTransaction().rollback();
         }
         session.close();
+    }
+
+    @Override
+    public boolean getByName(String name) {
+        Session session = sessionFactory.openSession();
+        try {
+            User user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            if(user != null){
+                return true;
+            }
+        } catch (Exception e){
+            e.getStackTrace();
+        }
+        return false;
     }
 }

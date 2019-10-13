@@ -4,7 +4,6 @@ import model.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class UserDaoJDBCImpl implements UserDao {
     private static UserDaoJDBCImpl instance;
@@ -25,6 +24,8 @@ public class UserDaoJDBCImpl implements UserDao {
     //language=SQL
     private final String SQL_GET_BY_NAME = "SELECT * FROM user_table WHERE name = ?";
     //language=SQL
+    private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ?, password = ?";
+    //language=SQL
     private final String SQL_SELECT_ALL = "SELECT * FROM user_table";
     //language=SQL
     private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE id = ?";
@@ -39,12 +40,12 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAll(){
         createTable();
         List<User> list = new ArrayList<>();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_SELECT_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                long id = resultSet.getLong("id");
+                Long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
                 String pass = resultSet.getString("password");
                 String email = resultSet.getString("email");
@@ -60,7 +61,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void edit(User user){
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_EDIT);
             preparedStatement.setLong(4, user.getId());
@@ -74,11 +75,12 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
     @Override
-    public Optional<User> getById(long id){
-        PreparedStatement preparedStatement = null;
-        String name = null;
-        String password = null;
-        String email = null;
+    public User getById(long id){
+        PreparedStatement preparedStatement;
+        String name;
+        String password;
+        String email;
+        User user = null;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_ID);
             preparedStatement.setLong(1, id);
@@ -87,26 +89,27 @@ public class UserDaoJDBCImpl implements UserDao {
                 name = resultSet.getString("name");
                 password = resultSet.getString("password");
                 email = resultSet.getString("email");
+                user = new User(id, name, password, email);
             }
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Optional.of(new User(id, name, password, email));
+        return user;
     }
 
     @Override
-    public boolean getByName(String name) {
-        PreparedStatement preparedStatement = null;
+    public boolean getByName(String name, String password) {
+        PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
+            preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME_AND_PASS);
             preparedStatement.setString(1, name);
+            preparedStatement.setString(1, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet != null ){
+            if(resultSet.next()) {
                 return true;
             }
-            resultSet.next();
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -117,7 +120,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void add(User user){
         createTable();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_ADD);
             preparedStatement.setString(1, user.getName());
@@ -129,8 +132,27 @@ public class UserDaoJDBCImpl implements UserDao {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean getByName(String name) {
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                return true;
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void createTable(){
-        Statement stmt = null;
+        Statement stmt;
         try {
             stmt = connection.createStatement();
             stmt.execute(SQL_CREATE_TABLE);
@@ -141,7 +163,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
     @Override
     public void delete(long id){
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_DROP_TABLE);
             preparedStatement.setLong(1, id);
