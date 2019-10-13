@@ -5,11 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-Hello ${user.name}
+Hello   <%= request.getSession().getAttribute("login") %>
 </br>
 <form method="POST" action="/userHome">
-    <input type="submit" value="Exit" name="exit"><br>
-    <input type="submit" value="Login" name="login" onclick="document.forms[0].action = '/'; return true;"><br>
+    <input type="submit" value="Back to login" name="login" onclick="document.forms[0].action = '/'; return true;"><br>
 </form>
 </body>
 </html>

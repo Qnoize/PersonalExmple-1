@@ -21,9 +21,15 @@
             <td align="right">Email</td>
             <td><input type="text" name="email"></td>
         </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Registration" name="Ok">
+                <input type="submit" value="Back to login"  onclick="document.forms[0].action = '/'; return true;"><br>
+            </td>
+        </tr>
     </table>
-    <input type="submit" value="Confirm" name="Ok">
-    <input type="submit" value="Login"  onclick="document.forms[0].action = '/'; return true;"><br>
+
 </form>
 
 <table table border="1" cellspacing="0" cellpadding="2">

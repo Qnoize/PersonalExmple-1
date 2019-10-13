@@ -10,4 +10,6 @@ public interface Service <T> {
     void deleteUser(long id);
     void addUser(T user);
     boolean userExist(String name, String password);
+    boolean userExistByName(String name);
+    boolean getByName(String name);
 }

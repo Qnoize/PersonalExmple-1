@@ -19,7 +19,7 @@
         <tr>
             <td></td>
             <td align="left" width="100">
-                <input type="submit" value="Confirm" name="Ok">
+                <input type="submit" value="Enter" name="Ok">
                 <input type="submit" value="Registration" name="register" onclick="document.forms[0].action = '/register'; return true;"><br>
             </td>
         </tr>

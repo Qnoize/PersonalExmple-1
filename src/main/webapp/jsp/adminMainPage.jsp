@@ -11,7 +11,7 @@
 Work with - ${requestScope.with}
 
 <form method="POST" action="/admin">
-    <p><b>Add user</b></p>
+    <p><b>Add new user</b></p>
     <table width="100%" cellspacing="0" cellpadding="4">
         <tr>
             <td align="right" width="100">Login</td>
@@ -25,9 +25,14 @@ Work with - ${requestScope.with}
             <td align="right">Email</td>
             <td><input type="text" name="email"></td>
         </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add new user" name="Ok">
+                <input type="submit" value="Back to login"  onclick="document.forms[0].action = '/'; return true;"><br>
+            </td>
+        </tr>
     </table>
-    <input type="submit" value="Confirm" name="Ok"><br>
-    <input type="submit" value="Login"  onclick="document.forms[0].action = '/'; return true;"><br>
 </form>
 
 <table table border="1" cellspacing="0" cellpadding="2">
@@ -41,6 +46,7 @@ Work with - ${requestScope.with}
         <tr>
             <td> ${user.id} </td>
             <td> ${user.name} </td>
+            <td> ${user.password} </td>
             <td> ${user.email} </td>
             <td>
                 <form method="GET" action="/edit">

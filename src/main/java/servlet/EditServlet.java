@@ -16,7 +16,7 @@ public class EditServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException { this.userService = UserServiceImpl.getInstance(); }
+    public void init() { this.userService = UserServiceImpl.getInstance(); }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,7 +27,7 @@ public class EditServlet extends HttpServlet {
         try {
             id = Long.parseLong(req.getParameter("id"));
         } catch (NumberFormatException e){
-            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
+            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
             dispatcher.forward(req, resp);
         }
         String edit = req.getParameter("edit");
@@ -35,7 +35,7 @@ public class EditServlet extends HttpServlet {
             User user = userService.getUserById(id);
             req.setAttribute("user", user);
         }
-        RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
+        RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -48,7 +48,7 @@ public class EditServlet extends HttpServlet {
         try {
             id = Long.parseLong(req.getParameter("id"));
         } catch (NumberFormatException e){
-            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/editUser.jsp");
+            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
             dispatcher.forward(req, resp);
         }
         String name = req.getParameter("login");

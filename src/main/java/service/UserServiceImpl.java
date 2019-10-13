@@ -2,6 +2,7 @@ package service;
 
 import DAO.UserDao;
 import DAO.UserDaoFactory;
+import model.Role;
 import model.User;
 import java.util.List;
 
@@ -9,8 +10,7 @@ public class UserServiceImpl implements UserService {
     private static UserServiceImpl instance;
     private static UserDao userDao;
 
-    private UserServiceImpl() {
-    }
+    private UserServiceImpl() { }
 
     public static UserService getInstance() {
         if (instance == null || userDao == null) {
@@ -40,16 +40,21 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(long id) { userDao.delete(id); }
 
     @Override
-    public void addUser(User user){
-     if (!userExistByName(user.getName())){
-           userDao.add(user);
-      }
-    }
     public boolean userExistByName(String name){ return getByName(name);}
 
-    private boolean getByName(String name) { return userDao.getByName(name); }
+    @Override
+    public boolean getByName(String name) { return userDao.getByName(name); }
 
+    @Override
     public boolean userExist(String name, String password) {
         return getUserByName(name, password);
+    }
+
+    @Override
+    public void addUser(User user){ if (!userExistByName(user.getName())){ userDao.add(user); } }
+
+    @Override
+    public Role getUserRole(String name) {
+        return userDao.getUserRole(name);
     }
 }

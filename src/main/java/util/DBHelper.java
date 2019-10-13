@@ -1,6 +1,7 @@
 package util;
 
 import com.mysql.cj.jdbc.Driver;
+import model.Role;
 import model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -32,6 +33,7 @@ public class DBHelper {
     private static Configuration getConfiguration(){
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Role.class);
         configuration.setProperty("hibernate.dialect", readProperty("hibernate.dialect"));
         configuration.setProperty("hibernate.connection.driver_class", readProperty("hibernate.connection.driver_class"));
         configuration.setProperty("hibernate.connection.url", readProperty("hibernate.connection.url"));

@@ -9,8 +9,9 @@ public class UserDaoFactory {
     public static String daoType = null;
     private static UserDaoFactory instance;
     private static UserDao userDao;
-    private UserDaoFactory() {
-    }
+
+    private UserDaoFactory() { }
+
     public static UserDaoFactory getInstance() {
         if (instance == null) {
             instance = new UserDaoFactory();

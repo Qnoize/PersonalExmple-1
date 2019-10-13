@@ -1,5 +1,6 @@
 package DAO;
 
+import model.Role;
 import model.User;
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,13 +25,15 @@ public class UserDaoJDBCImpl implements UserDao {
     //language=SQL
     private final String SQL_GET_BY_NAME = "SELECT * FROM user_table WHERE name = ?";
     //language=SQL
-    private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ?, password = ?";
+    private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ? AND password = ?";
     //language=SQL
     private final String SQL_SELECT_ALL = "SELECT * FROM user_table";
     //language=SQL
     private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE id = ?";
     //language=SQL
     private final String SQL_ADD = "INSERT INTO user_table (name, password, email) VALUES (?, ?, ?)";
+    //language=SQL
+    private final String SQL_ADD_ROLE = "INSERT INTO user_role (role, id_owner) VALUES (?, ?)";
     //language=SQL
     private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXISTS user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
     //language=SQL
@@ -59,7 +62,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
         return list;
     }
-
+    @Override
     public void edit(User user){
         PreparedStatement preparedStatement;
         try {
@@ -105,7 +108,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME_AND_PASS);
             preparedStatement.setString(1, name);
-            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 return true;
@@ -117,9 +120,8 @@ public class UserDaoJDBCImpl implements UserDao {
         }
         return false;
     }
-
+    @Override
     public void add(User user){
-        createTable();
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_ADD);
@@ -128,9 +130,30 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(3, user.getEmail());
             preparedStatement.executeUpdate();
             preparedStatement.close();
+            addRole(user);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void addRole(User user) {
+        PreparedStatement preparedStatement;
+        try {
+            Role role = new Role("user", user.getId());
+            preparedStatement = connection.prepareStatement(SQL_ADD_ROLE);
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setLong(2, role.getId_owner());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Role getUserRole(String name) {
+        return null;
     }
 
     @Override

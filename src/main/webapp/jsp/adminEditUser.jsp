@@ -25,7 +25,8 @@
     </table>
     <input type="submit" value="Confirm" name="Ok">
     <input type="hidden" name="id" value="${user.id}">
-    <input type="submit" value="Admin" onclick="document.forms[0].action = '/admin'; return true;"><br>
+    <input type="submit" value="Back to admin" onclick="document.forms[0].action = '/admin'; return true;">
+    <input type="submit" value="Back to login"  onclick="document.forms[0].action = '/'; return true;"><br>
 </form>
 
 </body>

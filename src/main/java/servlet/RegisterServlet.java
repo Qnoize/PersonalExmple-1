@@ -17,11 +17,10 @@ public class RegisterServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {this.userService = UserServiceImpl.getInstance();}
+    public void init() {this.userService = UserServiceImpl.getInstance();}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         List<User> users = userService.getAllUsers();
         resp.setContentType("text/html; charset=windows-1251");
         req.setCharacterEncoding("CP1251");

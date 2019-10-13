@@ -7,7 +7,7 @@ import java.util.Properties;
 public class ReadProperties {
     private static String pathToConfigurationFile = "config.properties";
     public static String readProperty(String value){
-        InputStream stream = null;
+        InputStream stream;
         String prop = null;
         try {
             stream = ReadProperties.class.getClassLoader().getResourceAsStream(pathToConfigurationFile);

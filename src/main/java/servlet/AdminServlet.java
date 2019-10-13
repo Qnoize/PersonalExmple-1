@@ -18,8 +18,7 @@ public class AdminServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {this.userService = UserServiceImpl.getInstance();}
-
+    public void init() {this.userService = UserServiceImpl.getInstance();}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,14 +26,15 @@ public class AdminServlet extends HttpServlet {
         req.setCharacterEncoding("CP1251");
 
         req.setAttribute("with", UserDaoFactory.daoType);
+
         List<User> users = userService.getAllUsers();
         req.setAttribute("list", users);
-        RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminHome.jsp");
+        RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminMainPage.jsp");
         dispatcher.forward(req, resp);
 
         List<User> list = userService.getAllUsers();
         req.setAttribute("list", list);
-        req.getRequestDispatcher("/jsp/adminHome.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/adminMainPage.jsp").forward(req, resp);
     }
 
     @Override

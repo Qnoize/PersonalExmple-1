@@ -1,5 +1,6 @@
 package servlet;
 
+import model.User;
 import service.UserService;
 import service.UserServiceImpl;
 import javax.servlet.ServletException;
@@ -8,11 +9,11 @@ import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet("/")
-public class MainServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     private UserService userService;
 
     @Override
-    public void init() throws ServletException {this.userService = UserServiceImpl.getInstance();}
+    public void init() {this.userService = UserServiceImpl.getInstance();}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,6 +27,7 @@ public class MainServlet extends HttpServlet {
 
         String name = req.getParameter("login");
         String password = req.getParameter("password");
+
         if(req.getParameter("register") != null){
             req.getServletContext().getRequestDispatcher("/jsp/registerUser.jsp").forward(req, resp);
         }
@@ -33,7 +35,12 @@ public class MainServlet extends HttpServlet {
         if (userService.userExist(name, password)) {
             HttpSession session = req.getSession();
             session.setAttribute("login", name);
-            req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
+            session.setAttribute("role", userService.getUserRole(name));
+            if(!userService.getUserRole(name).getRole().equals("admin")) {
+                req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
+            } else {
+                req.getServletContext().getRequestDispatcher("/jsp/adminMainPage.jsp").forward(req, resp);
+            }
         } else {
             resp.sendRedirect(req.getContextPath() + "/");
         }

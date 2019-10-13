@@ -9,4 +9,5 @@ public interface CrudDao<T> {
     void delete(long id);
     void edit(T user);
     void add(T user);
+    boolean getByName(String name);
 }
