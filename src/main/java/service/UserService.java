@@ -1,8 +1,8 @@
 package service;
 
-import model.Role;
 import model.User;
+import model.UserRole;
 
 public interface UserService extends Service<User>{
-    Role getUserRole(String name);
+    UserRole getUserRole(String name);
 }

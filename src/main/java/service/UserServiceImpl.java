@@ -4,6 +4,8 @@ import DAO.UserDao;
 import DAO.UserDaoFactory;
 import model.Role;
 import model.User;
+import model.UserRole;
+
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user){ if (!userExistByName(user.getName())){ userDao.add(user); } }
 
     @Override
-    public Role getUserRole(String name) {
+    public UserRole getUserRole(String name) {
         return userDao.getUserRole(name);
     }
 }

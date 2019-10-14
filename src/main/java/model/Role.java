@@ -5,53 +5,41 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_role")
+@Table(name = "role_table")
 public class Role implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long role_id;
 
     @Column(name = "role")
     private String role;
 
-    @Column(name = "id_owner")
-    private Long id_owner;
 
-    public Role(Long id, String role, Long id_owner) {
-        this.id = id;
+    public Role(Long role_id, String role) {
+        this.role_id = role_id;
         this.role = role;
-        this.id_owner = id_owner;
     }
 
-    public Long getId() {
-        return id;
+    public Long getRole_id() {
+        return role_id;
     }
 
     public String getRole() {
         return role;
     }
 
-    public Long getId_owner() {
-        return id_owner;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setRole_id(Long role_id) {
+        this.role_id = role_id;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
 
-    public void setId_owner(Long id_owner) {
-        this.id_owner = id_owner;
-    }
-
-    public Role(String role, Long id_owner) {
+    public Role(String role) {
         this.role = role;
-        this.id_owner = id_owner;
     }
 
     public Role() { }
@@ -61,22 +49,20 @@ public class Role implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Role)) return false;
         Role role1 = (Role) o;
-        return Objects.equals(id, role1.id) &&
-                Objects.equals(role, role1.role) &&
-                Objects.equals(id_owner, role1.id_owner);
+        return Objects.equals(role_id, role1.role_id) &&
+                Objects.equals(role, role1.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, id_owner);
+        return Objects.hash(role_id, role);
     }
 
     @Override
     public String toString() {
         return "Role{" +
-                "id=" + id +
+                "id=" + role_id +
                 ", role='" + role + '\'' +
-                ", id_owner=" + id_owner +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package DAO;
 
 import model.Role;
+import model.UserRole;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import model.User;
@@ -31,14 +32,13 @@ public class UserDaoHibernateImpl implements UserDao {
     //language=SQL
     private final String SQL_SELECT_ALL = "FROM User";
     //language=SQL
-    private final String SQL_SELECT_ALL_ROLE = "FROM Role";
-    //language=SQL
-    private final String SQL_SELECT_ROLE = "FROM Role WHERE id_owner  =:id_owner ";
+    private final String SQL_SELECT_ROLE = "FROM UserRole WHERE user_id  =:user_id ";
+
     @Override
-    public User getById(long id) {
+    public User getById(long user_id) {
         Session session = sessionFactory.openSession();
         return session.createQuery(SQL_SELECT_BY_ID, User.class)
-                .setParameter("id", id)
+                .setParameter("user_id", user_id)
                 .getSingleResult();
     }
     @Override
@@ -86,10 +86,10 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long user_id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.delete(getById(id));
+        session.delete(getById(user_id));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
@@ -115,8 +115,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void addRole(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Role role = new Role("user", user.getId());
-        session.save(role);
+        UserRole userRole = new UserRole(user.getUser_id(), 1L);
+        session.save(userRole);
         try {
             session.getTransaction().commit();
         } catch (Exception e){
@@ -127,18 +127,16 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
-    public Role getUserRole(String name) {
+    public UserRole getUserRole(String name) {
         Session session = sessionFactory.openSession();
 
             User user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
                     .setParameter("name", name)
                     .getSingleResult();
-            Role role = session.createQuery(SQL_SELECT_ROLE, Role.class)
-                    .setParameter("id_owner", user.getId())
+            UserRole userRole = session.createQuery(SQL_SELECT_ROLE, UserRole.class)
+                    .setParameter("user_id", user.getUser_id())
                     .getSingleResult();
-            System.out.println(user);
-            System.out.println(role);
-            return role;
+            return userRole;
 
     }
 

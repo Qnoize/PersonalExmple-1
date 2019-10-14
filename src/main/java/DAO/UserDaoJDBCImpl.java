@@ -2,8 +2,8 @@ package DAO;
 
 import model.Role;
 import model.User;
+import model.UserRole;
 
-import java.security.acl.LastOwnerException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +23,25 @@ public class UserDaoJDBCImpl implements UserDao {
         return instance;
     }
     //language=SQL
-    private final String SQL_GET_BY_ID = "SELECT * FROM user_table WHERE id = ?";
+    private final String SQL_GET_BY_ID = "SELECT * FROM user_table WHERE user_id = ?";
     //language=SQL
     private final String SQL_GET_BY_NAME = "SELECT * FROM user_table WHERE name = ?";
     //language=SQL
-    private final String SQL_GET_ROLE = "SELECT * FROM user_role WHERE id_owner = ?";
+    private final String SQL_GET_ROLE = "SELECT * FROM user_role WHERE user_id = ?";
     //language=SQL
     private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ? AND password = ?";
     //language=SQL
     private final String SQL_SELECT_ALL = "SELECT * FROM user_table";
     //language=SQL
-    private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE id = ?";
+    private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE user_id = ?";
     //language=SQL
     private final String SQL_ADD = "INSERT INTO user_table (name, password, email) VALUES (?, ?, ?)";
     //language=SQL
-    private final String SQL_ADD_ROLE = "INSERT INTO user_role (role, id_owner) VALUES (?, ?)";
+    private final String SQL_ADD_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
     //language=SQL
     private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXISTS user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
     //language=SQL
-    private final String SQL_DROP_TABLE = "DELETE FROM user_table WHERE id = ?";
+    private final String SQL_DROP_TABLE = "DELETE FROM user_table WHERE user_id = ?";
 
     @Override
     public List<User> getAll(){
@@ -71,7 +71,7 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_EDIT);
-            preparedStatement.setLong(4, user.getId());
+            preparedStatement.setLong(4, user.getUser_id());
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getEmail());
@@ -144,10 +144,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void addRole(User user) {
         PreparedStatement preparedStatement;
         try {
-            Role role = new Role("user", user.getId());
+            UserRole userRole = new UserRole(user.getUser_id(), 1L);
             preparedStatement = connection.prepareStatement(SQL_ADD_ROLE);
-            preparedStatement.setString(1, role.getRole());
-            preparedStatement.setLong(2, role.getId_owner());
+            preparedStatement.setLong(1, userRole.getUser_id());
+            preparedStatement.setLong(2, userRole.getRole_id());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -156,16 +156,16 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     @Override
-    public Role getUserRole(String name) {
+    public UserRole getUserRole(String name) {
         PreparedStatement preparedStatement;
-        Role role1 = null;
+        UserRole userRole = null;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             User user = null;
             if(resultSet.next()){
-                Long id = resultSet.getLong("id");
+                Long id = resultSet.getLong("user_id");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
                 user = new User(id, name, password, email);
@@ -174,20 +174,19 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement(SQL_GET_ROLE);
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, user.getUser_id());
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
-                Long idr = resultSet.getLong("id");
-                String role = resultSet.getString("role");
-                Long id_owner = resultSet.getLong("id_owner");
-                role1 = new Role(idr, role, id_owner);
+                Long idu = resultSet.getLong("user_id");
+                Long idr = resultSet.getLong("role_id");
+                userRole = new UserRole(idu, idr);
             }
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return role1;
+        return userRole;
     }
 
 

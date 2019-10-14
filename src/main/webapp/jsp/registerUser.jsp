@@ -40,7 +40,7 @@
     </tr>
     <c:forEach items="${requestScope.list}" var="user">
         <tr>
-            <td> ${user.id} </td>
+            <td> ${user.user_id} </td>
             <td> ${user.name} </td>
             <td> ${user.email} </td>
         </tr>

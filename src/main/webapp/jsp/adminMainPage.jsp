@@ -45,18 +45,18 @@ User - role :  <%= request.getSession().getAttribute("role") %>
     </tr>
     <c:forEach items="${requestScope.list}" var="user">
         <tr>
-            <td> ${user.id} </td>
+            <td> ${user.user_id} </td>
             <td> ${user.name} </td>
             <td> ${user.password} </td>
             <td> ${user.email} </td>
             <td>
                 <form method="GET" action="/edit">
                     <input type="submit" value="Edit" name="edit">
-                    <input type="hidden" name="id" value="${user.id}">
+                    <input type="hidden" name="id" value="${user.user_id}">
                 </form>
                 <form method="GET" action="/delete">
                     <input type="submit" value="Delete" name="delete">
-                    <input type="hidden" name="id" value="${user.id}">
+                    <input type="hidden" name="id" value="${user.user_id}">
                 </form>
             </td>
         </tr>

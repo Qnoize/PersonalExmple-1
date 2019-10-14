@@ -9,9 +9,9 @@ import java.util.Objects;
 public class User implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long user_id;
 
     @Column(name = "name")
     private String name;
@@ -30,8 +30,8 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public User(long id, String name, String password, String email) {
-        this.id = id;
+    public User(long user_id, String name, String password, String email) {
+        this.user_id = user_id;
         this.name = name;
         this.password = password;
         this.email = email;
@@ -39,10 +39,10 @@ public class User implements Serializable {
 
     public <T> User(T t) { }
 
-    public Long getId() { return id; }
+    public Long getUser_id() { return user_id; }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public String getPassword() {
@@ -85,7 +85,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + user_id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
