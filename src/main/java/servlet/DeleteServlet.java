@@ -19,15 +19,15 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminMainPage.jsp");
-        Long id = null;
+        Long user_id = null;
         try {
-            id = Long.parseLong(req.getParameter("id"));
+            user_id = Long.parseLong(req.getParameter("user_id"));
         } catch (NumberFormatException e){
             dispatcher.forward(req, resp);
         }
         String delete = req.getParameter("delete");
-        if (delete != null && id != null) {
-            userService.deleteUser(id);
+        if (delete != null && user_id != null) {
+            userService.deleteUser(user_id);
         }
         resp.sendRedirect("/admin");
     }

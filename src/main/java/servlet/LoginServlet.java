@@ -34,11 +34,12 @@ public class LoginServlet extends HttpServlet {
         if (userService.userExist(name, password)) {
             HttpSession session = req.getSession();
             session.setAttribute("login", name);
-            session.setAttribute("role", userService.getUserRole(name).getRole_id());
+
             String role = "user";
             if((userService.getUserRole(name).getRole_id()) == 2L){
                 role = "admin";
             }
+            session.setAttribute("role", role);
             if(!role.equals("admin")) {
                 req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
             } else {

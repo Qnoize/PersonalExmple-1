@@ -23,16 +23,16 @@ public class EditServlet extends HttpServlet {
         resp.setContentType("text/html; charset=windows-1251");
         req.setCharacterEncoding("CP1251");
 
-        Long id = null;
+        Long user_id = null;
         try {
-            id = Long.parseLong(req.getParameter("id"));
+            user_id = Long.parseLong(req.getParameter("user_id"));
         } catch (NumberFormatException e){
             RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
             dispatcher.forward(req, resp);
         }
         String edit = req.getParameter("edit");
-        if (edit != null && id != null) {
-            User user = userService.getUserById(id);
+        if (edit != null && user_id != null) {
+            User user = userService.getUserById(user_id);
             req.setAttribute("user", user);
         }
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
@@ -44,9 +44,9 @@ public class EditServlet extends HttpServlet {
         resp.setContentType("text/html; charset=windows-1251");
         req.setCharacterEncoding("CP1251");
 
-        Long id = null;
+        Long user_id = null;
         try {
-            id = Long.parseLong(req.getParameter("id"));
+            user_id = Long.parseLong(req.getParameter("user_id"));
         } catch (NumberFormatException e){
             RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
             dispatcher.forward(req, resp);
@@ -54,7 +54,7 @@ public class EditServlet extends HttpServlet {
         String name = req.getParameter("login");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
-        User user = new User(id, name, pass, email);
+        User user = new User(user_id, name, pass, email);
         userService.userEdit(user);
         resp.sendRedirect("/admin");
     }

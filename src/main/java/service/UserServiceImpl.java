@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(long id){ return userDao.getById(id);}
+    public User getUserById(long user_id){ return userDao.getById(user_id);}
 
     @Override
     public boolean getUserByName(String name, String password){ return userDao.getByName(name, password);}
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long id) { userDao.delete(id); }
+    public void deleteUser(long user_id) { userDao.delete(user_id); }
 
     @Override
     public boolean userExistByName(String name){ return getByName(name);}

@@ -52,11 +52,11 @@ User - role :  <%= request.getSession().getAttribute("role") %>
             <td>
                 <form method="GET" action="/edit">
                     <input type="submit" value="Edit" name="edit">
-                    <input type="hidden" name="id" value="${user.user_id}">
+                    <input type="hidden" name="user_id" value="${user.user_id}">
                 </form>
                 <form method="GET" action="/delete">
                     <input type="submit" value="Delete" name="delete">
-                    <input type="hidden" name="id" value="${user.user_id}">
+                    <input type="hidden" name="user_id" value="${user.user_id}">
                 </form>
             </td>
         </tr>

@@ -24,7 +24,7 @@ public class UserDaoHibernateImpl implements UserDao {
         return instance;
     }
     //language=SQL
-    private final String SQL_SELECT_BY_ID = "FROM User WHERE id = :id";
+    private final String SQL_SELECT_BY_ID = "FROM User WHERE user_id = :user_id";
     //language=SQL
     private final String SQL_SELECT_BY_NAME = "FROM User WHERE name = :name";
     //language=SQL
