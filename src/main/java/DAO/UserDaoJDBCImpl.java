@@ -52,11 +52,11 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement = connection.prepareStatement(SQL_SELECT_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
+                Long user_id = resultSet.getLong("user_id");
                 String name = resultSet.getString("name");
                 String pass = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                User user = new User(id, name, pass, email);
+                User user = new User(user_id, name, pass, email);
                 list.add(user);
             }
             resultSet.close();
@@ -82,7 +82,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
     @Override
-    public User getById(long id){
+    public User getById(long user_id){
         PreparedStatement preparedStatement;
         String name;
         String password;
@@ -90,13 +90,13 @@ public class UserDaoJDBCImpl implements UserDao {
         User user = null;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_ID);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, user_id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
                 name = resultSet.getString("name");
                 password = resultSet.getString("password");
                 email = resultSet.getString("email");
-                user = new User(id, name, password, email);
+                user = new User(user_id, name, password, email);
             }
             resultSet.close();
             preparedStatement.close();
@@ -165,10 +165,10 @@ public class UserDaoJDBCImpl implements UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             User user = null;
             if(resultSet.next()){
-                Long id = resultSet.getLong("user_id");
+                Long user_id = resultSet.getLong("user_id");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                user = new User(id, name, password, email);
+                user = new User(user_id, name, password, email);
             }
             resultSet.close();
             preparedStatement.close();
@@ -219,11 +219,11 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
     @Override
-    public void delete(long id){
+    public void delete(long user_id){
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_DROP_TABLE);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, user_id);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
