@@ -19,6 +19,12 @@ public class Role implements Serializable {
     @Column(name = "id_owner")
     private Long id_owner;
 
+    public Role(Long id, String role, Long id_owner) {
+        this.id = id;
+        this.role = role;
+        this.id_owner = id_owner;
+    }
+
     public Long getId() {
         return id;
     }
@@ -48,6 +54,8 @@ public class Role implements Serializable {
         this.id_owner = id_owner;
     }
 
+    public Role() { }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,5 +69,14 @@ public class Role implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, role, id_owner);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                ", id_owner=" + id_owner +
+                '}';
     }
 }

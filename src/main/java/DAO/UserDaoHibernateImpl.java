@@ -31,7 +31,7 @@ public class UserDaoHibernateImpl implements UserDao {
     //language=SQL
     private final String SQL_SELECT_ALL = "FROM User";
     //language=SQL
-    private final String SQL_SELECT_ID_BY_NAME = "FROM User WHERE name  =:name ";
+    private final String SQL_SELECT_ALL_ROLE = "FROM Role";
     //language=SQL
     private final String SQL_SELECT_ROLE = "FROM Role WHERE id_owner  =:id_owner ";
     @Override
@@ -129,18 +129,17 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public Role getUserRole(String name) {
         Session session = sessionFactory.openSession();
-        Role role = null;
-        try {
-            User user = session.createQuery(SQL_SELECT_ID_BY_NAME, User.class)
+
+            User user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
                     .setParameter("name", name)
                     .getSingleResult();
-            return session.createQuery(SQL_SELECT_ROLE, Role.class)
+            Role role = session.createQuery(SQL_SELECT_ROLE, Role.class)
                     .setParameter("id_owner", user.getId())
                     .getSingleResult();
-        } catch (Exception e){
-            e.getStackTrace();
-        }
-        return role;
+            System.out.println(user);
+            System.out.println(role);
+            return role;
+
     }
 
     @Override

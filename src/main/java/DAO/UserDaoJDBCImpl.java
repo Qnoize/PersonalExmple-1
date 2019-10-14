@@ -2,6 +2,8 @@ package DAO;
 
 import model.Role;
 import model.User;
+
+import java.security.acl.LastOwnerException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ public class UserDaoJDBCImpl implements UserDao {
     private final String SQL_GET_BY_ID = "SELECT * FROM user_table WHERE id = ?";
     //language=SQL
     private final String SQL_GET_BY_NAME = "SELECT * FROM user_table WHERE name = ?";
+    //language=SQL
+    private final String SQL_GET_ROLE = "SELECT * FROM user_role WHERE id_owner = ?";
     //language=SQL
     private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ? AND password = ?";
     //language=SQL
@@ -153,8 +157,39 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public Role getUserRole(String name) {
-        return null;
+        PreparedStatement preparedStatement;
+        Role role1 = null;
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = null;
+            if(resultSet.next()){
+                Long id = resultSet.getLong("id");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                user = new User(id, name, password, email);
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+            preparedStatement = connection.prepareStatement(SQL_GET_ROLE);
+            preparedStatement.setLong(1, user.getId());
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                Long idr = resultSet.getLong("id");
+                String role = resultSet.getString("role");
+                Long id_owner = resultSet.getLong("id_owner");
+                role1 = new Role(idr, role, id_owner);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return role1;
     }
+
 
     @Override
     public boolean getByName(String name) {

@@ -1,6 +1,5 @@
 package servlet;
 
-import model.User;
 import service.UserService;
 import service.UserServiceImpl;
 import javax.servlet.ServletException;
@@ -35,11 +34,11 @@ public class LoginServlet extends HttpServlet {
         if (userService.userExist(name, password)) {
             HttpSession session = req.getSession();
             session.setAttribute("login", name);
-            session.setAttribute("role", userService.getUserRole(name));
+            session.setAttribute("role", userService.getUserRole(name).getRole());
             if(!userService.getUserRole(name).getRole().equals("admin")) {
                 req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
             } else {
-                req.getServletContext().getRequestDispatcher("/jsp/adminMainPage.jsp").forward(req, resp);
+                req.getServletContext().getRequestDispatcher("/admin").forward(req, resp);
             }
         } else {
             resp.sendRedirect(req.getContextPath() + "/");

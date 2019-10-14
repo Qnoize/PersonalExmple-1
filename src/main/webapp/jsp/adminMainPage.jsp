@@ -9,6 +9,7 @@
 <body>
 
 Work with - ${requestScope.with}
+User - role :  <%= request.getSession().getAttribute("role") %>
 
 <form method="POST" action="/admin">
     <p><b>Add new user</b></p>

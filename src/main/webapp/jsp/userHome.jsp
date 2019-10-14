@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-Hello   <%= request.getSession().getAttribute("login") %>
+Hello   <%= request.getSession().getAttribute("login") %><br>
+User - role :        <%= request.getSession().getAttribute("role") %>
 </br>
 <form method="POST" action="/userHome">
     <input type="submit" value="Back to login" name="login" onclick="document.forms[0].action = '/'; return true;"><br>
