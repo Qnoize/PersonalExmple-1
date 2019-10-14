@@ -2,7 +2,6 @@ package service;
 
 import DAO.UserDao;
 import DAO.UserDaoFactory;
-import model.Role;
 import model.User;
 import model.UserRole;
 

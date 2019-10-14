@@ -1,6 +1,5 @@
 package DAO;
 
-import model.Role;
 import model.UserRole;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
