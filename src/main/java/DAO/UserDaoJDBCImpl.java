@@ -39,7 +39,9 @@ public class UserDaoJDBCImpl implements UserDao {
     //language=SQL
     private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXISTS user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
     //language=SQL
-    private final String SQL_DROP_TABLE = "DELETE FROM user_table WHERE user_id = ?";
+    private final String SQL_DELETE_IN_TABLE = "DELETE FROM user_table WHERE user_id = ?";
+    //language=SQL
+    private final String SQL_DELETE_ROLE = "DELETE FROM user_role WHERE user_id = ?";
 
     @Override
     public List<User> getAll(){
@@ -142,10 +144,21 @@ public class UserDaoJDBCImpl implements UserDao {
     public void addRole(User user) {
         PreparedStatement preparedStatement;
         try {
-            UserRole userRole = new UserRole(user.getUser_id(), 1L);
+            User userId = null;
+            preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
+            preparedStatement.setString(1, user.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                Long user_id = resultSet.getLong("user_id");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                userId = new User(user_id, user.getName(), password, email);
+            }
+            resultSet.close();
+            preparedStatement.close();
             preparedStatement = connection.prepareStatement(SQL_ADD_ROLE);
-            preparedStatement.setLong(1, userRole.getUser_id());
-            preparedStatement.setLong(2, userRole.getRole_id());
+            preparedStatement.setLong(1, userId.getUser_id());
+            preparedStatement.setLong(2, 1L);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -187,7 +200,6 @@ public class UserDaoJDBCImpl implements UserDao {
         return userRole;
     }
 
-
     @Override
     public boolean getByName(String name) {
         PreparedStatement preparedStatement;
@@ -220,7 +232,11 @@ public class UserDaoJDBCImpl implements UserDao {
     public void delete(long user_id){
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement(SQL_DROP_TABLE);
+            preparedStatement = connection.prepareStatement(SQL_DELETE_ROLE);
+            preparedStatement.setLong(1, user_id);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            preparedStatement = connection.prepareStatement(SQL_DELETE_IN_TABLE);
             preparedStatement.setLong(1, user_id);
             preparedStatement.executeUpdate();
             preparedStatement.close();

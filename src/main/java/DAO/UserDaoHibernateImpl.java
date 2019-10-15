@@ -88,12 +88,20 @@ public class UserDaoHibernateImpl implements UserDao {
     public void delete(long user_id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        session.delete(getByRole(user_id));
         session.delete(getById(user_id));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
             session.getTransaction().rollback();
         }
+    }
+
+    public UserRole getByRole(long user_id) {
+        Session session = sessionFactory.openSession();
+        return session.createQuery(SQL_SELECT_ROLE, UserRole.class)
+                .setParameter("user_id", user_id)
+                .getSingleResult();
     }
 
     @Override
@@ -122,7 +130,6 @@ public class UserDaoHibernateImpl implements UserDao {
             session.getTransaction().rollback();
         }
         session.close();
-
     }
 
     @Override
@@ -136,7 +143,6 @@ public class UserDaoHibernateImpl implements UserDao {
                     .setParameter("user_id", user.getUser_id())
                     .getSingleResult();
             return userRole;
-
     }
 
     @Override
