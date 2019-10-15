@@ -1,12 +1,17 @@
 package model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "role_table")
 public class Role implements Serializable {
+    private static final long serialVersionUID = 1L;
+    //private List<User> user;
 
     @Id
     @Column(name = "role_id")
@@ -15,7 +20,6 @@ public class Role implements Serializable {
 
     @Column(name = "role")
     private String role;
-
 
     public Role(Long role_id, String role) {
         this.role_id = role_id;

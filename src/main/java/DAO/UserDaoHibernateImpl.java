@@ -36,9 +36,12 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public User getById(long user_id) {
         Session session = sessionFactory.openSession();
-        return session.createQuery(SQL_SELECT_BY_ID, User.class)
+
+        User user = session.createQuery(SQL_SELECT_BY_ID, User.class)
                 .setParameter("user_id", user_id)
                 .getSingleResult();
+        session.close();
+        return user;
     }
     @Override
     public boolean getByName(String name, String password) {
@@ -54,6 +57,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e){
             e.getStackTrace();
         }
+        session.close();
         return false;
     }
 
@@ -88,20 +92,24 @@ public class UserDaoHibernateImpl implements UserDao {
     public void delete(long user_id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.delete(getByRole(user_id));
-        session.delete(getById(user_id));
+        //session.delete(getByRole(user_id));
+        session.delete(session.get(User.class, user_id));
+        //session.delete(getById(user_id));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
             session.getTransaction().rollback();
         }
+        session.close();
     }
 
     public UserRole getByRole(long user_id) {
         Session session = sessionFactory.openSession();
-        return session.createQuery(SQL_SELECT_ROLE, UserRole.class)
+        UserRole userRole =  session.createQuery(SQL_SELECT_ROLE, UserRole.class)
                 .setParameter("user_id", user_id)
                 .getSingleResult();
+        session.close();
+        return userRole;
     }
 
     @Override
@@ -142,6 +150,7 @@ public class UserDaoHibernateImpl implements UserDao {
             UserRole userRole = session.createQuery(SQL_SELECT_ROLE, UserRole.class)
                     .setParameter("user_id", user.getUser_id())
                     .getSingleResult();
+            session.close();
             return userRole;
     }
 
@@ -158,6 +167,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e){
             e.getStackTrace();
         }
+        session.close();
         return false;
     }
 }

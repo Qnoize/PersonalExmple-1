@@ -21,11 +21,11 @@ public class DeleteFilter implements Filter{
         try {
             HttpSession session = request.getSession(false);
             if (session == null || !session.getAttribute("role").equals("admin")) {
-                servletRequest.getServletContext().getRequestDispatcher("/").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/");
             }
             chain.doFilter(request, response);
         } catch (NullPointerException e){
-            servletRequest.getServletContext().getRequestDispatcher("/").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/");
         }
     }
 

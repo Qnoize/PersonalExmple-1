@@ -1,12 +1,17 @@
 package model;
 
+import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_table")
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+    //private List<Role> role;
 
     @Id
     @Column(name = "user_id")
@@ -21,6 +26,16 @@ public class User implements Serializable {
 
     @Column(name = "email")
     private String email;
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> role = new ArrayList<>();
+    //@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    //public List<Role> getRole() { return role; }
+    //public void setRole(List<Role> role) { return this.role = role; }
 
     public User() {}
 
