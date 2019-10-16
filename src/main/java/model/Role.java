@@ -1,9 +1,8 @@
 package model;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +10,6 @@ import java.util.Objects;
 @Table(name = "role_table")
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
-    //private List<User> user;
 
     @Id
     @Column(name = "role_id")
@@ -24,6 +22,16 @@ public class Role implements Serializable {
     public Role(Long role_id, String role) {
         this.role_id = role_id;
         this.role = role;
+    }
+
+    private List<User> users = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    public List<User> getUsers(){
+        return users;
     }
 
     public Long getRole_id() {
