@@ -25,15 +25,13 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
-    private List<Role> role = new ArrayList<>();
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public List<Role> getRole(){
-        return role;
-    }
+    private List<Role> role = new ArrayList<>();
 
     public User() {}
 

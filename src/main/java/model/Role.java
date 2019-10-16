@@ -24,15 +24,12 @@ public class Role implements Serializable {
         this.role = role;
     }
 
-    private List<User> users = new ArrayList<>();
     @ManyToMany
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    public List<User> getUsers(){
-        return users;
-    }
+    private List<User> users = new ArrayList<>();
 
     public Long getRole_id() {
         return role_id;

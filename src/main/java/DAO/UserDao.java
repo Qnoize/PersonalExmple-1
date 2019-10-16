@@ -4,8 +4,7 @@ import model.User;
 import model.UserRole;
 
 public interface UserDao extends CrudDao<User> {
-    void edit(User user);
-    void add(User user);
-    void addRole(User user);
+    boolean getByName(String name, String password);
     UserRole getUserRole(String name);
+    boolean getByName(String name);
 }

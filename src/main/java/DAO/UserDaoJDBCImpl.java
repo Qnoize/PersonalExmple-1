@@ -140,7 +140,6 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    @Override
     public void addRole(User user) {
         PreparedStatement preparedStatement;
         try {

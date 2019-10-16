@@ -79,7 +79,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void edit(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.update(user);
+        session.update(session.get(User.class, user.getUser_id()));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
@@ -92,24 +92,13 @@ public class UserDaoHibernateImpl implements UserDao {
     public void delete(long user_id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        //session.delete(getByRole(user_id));
         session.delete(session.get(User.class, user_id));
-        //session.delete(getById(user_id));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
             session.getTransaction().rollback();
         }
         session.close();
-    }
-
-    public UserRole getByRole(long user_id) {
-        Session session = sessionFactory.openSession();
-        UserRole userRole =  session.createQuery(SQL_SELECT_ROLE, UserRole.class)
-                .setParameter("user_id", user_id)
-                .getSingleResult();
-        session.close();
-        return userRole;
     }
 
     @Override
@@ -117,21 +106,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(user);
-        try {
-            session.getTransaction().commit();
-        } catch (Exception e){
-            session.getTransaction().rollback();
-        }
-        session.close();
-        addRole(user);
-    }
-
-    @Override
-    public void addRole(User user) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        UserRole userRole = new UserRole(user.getUser_id(), 1L);
-        session.save(userRole);
+        session.save(new UserRole(user.getUser_id(), 1L));
         try {
             session.getTransaction().commit();
         } catch (Exception e){
