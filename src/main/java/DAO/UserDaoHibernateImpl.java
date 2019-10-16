@@ -43,6 +43,7 @@ public class UserDaoHibernateImpl implements UserDao {
         session.close();
         return user;
     }
+
     @Override
     public boolean getByName(String name, String password) {
         Session session = sessionFactory.openSession();
@@ -55,9 +56,13 @@ public class UserDaoHibernateImpl implements UserDao {
                 return true;
             }
         } catch (Exception e){
+            System.out.println("Ошибка верификации по логину и паролю");
             e.getStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
         return false;
     }
 
@@ -69,9 +74,13 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.getTransaction().commit();
         } catch (Exception e){
+            System.out.println("Ошибка получения всех пользователей");
             session.getTransaction().rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
         return list;
     }
 
@@ -83,9 +92,13 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.getTransaction().commit();
         } catch (Exception e){
+            System.out.println("Ошибка редактирования пользователя");
             session.getTransaction().rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
     }
 
     @Override
@@ -96,9 +109,13 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.getTransaction().commit();
         } catch (Exception e){
+            System.out.println("Ошибка удаения пользователя");
             session.getTransaction().rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
     }
 
     @Override
@@ -110,9 +127,13 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.getTransaction().commit();
         } catch (Exception e){
+            System.out.println("Ошибка добавления пользователя");
             session.getTransaction().rollback();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
     }
 
     @Override
@@ -140,9 +161,13 @@ public class UserDaoHibernateImpl implements UserDao {
                 return true;
             }
         } catch (Exception e){
+            System.out.println("Ошибка нахождения по имени пользователя");
             e.getStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
-        session.close();
         return false;
     }
 }
