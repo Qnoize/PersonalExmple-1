@@ -2,19 +2,17 @@ package model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-@Table(name = "user_table")
+@Table(name = "userTable")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "userId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "name")
     private String name;
@@ -25,13 +23,15 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(
+            targetEntity = Role.class,
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> role = new ArrayList<>();
+            name = "userRole",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private Set<Role> role = new HashSet<>();
 
     public User() {}
 
@@ -41,8 +41,8 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public User(long user_id, String name, String password, String email) {
-        this.user_id = user_id;
+    public User(long userId, String name, String password, String email) {
+        this.userId = userId;
         this.name = name;
         this.password = password;
         this.email = email;
@@ -50,10 +50,12 @@ public class User implements Serializable {
 
     public <T> User(T t) { }
 
-    public Long getUser_id() { return user_id; }
+    public User(Long userId, long l) { }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public Long getUserId() { return userId; }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -80,6 +82,10 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public Set<Role> getRole() { return role; }
+
+    public void setRole(Set<Role> role) { this.role = role; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,7 +102,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + user_id +
+                "id=" + userId +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +

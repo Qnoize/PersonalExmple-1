@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/edit")
+@WebServlet("/admin/edit")
 public class EditServlet extends HttpServlet {
     private UserService userService;
 
@@ -20,19 +20,10 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=windows-1251");
-        req.setCharacterEncoding("CP1251");
-
-        Long user_id = null;
-        try {
-            user_id = Long.parseLong(req.getParameter("user_id"));
-        } catch (NumberFormatException e){
-            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
-            dispatcher.forward(req, resp);
-        }
+        Long userId = Long.parseLong(req.getParameter("userId"));
         String edit = req.getParameter("edit");
-        if (edit != null && user_id != null) {
-            User user = userService.getUserById(user_id);
+        if (edit != null && userId != null) {
+            User user = userService.getUserById(userId);
             req.setAttribute("user", user);
         }
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
@@ -41,20 +32,11 @@ public class EditServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=windows-1251");
-        req.setCharacterEncoding("CP1251");
-
-        Long user_id = null;
-        try {
-            user_id = Long.parseLong(req.getParameter("user_id"));
-        } catch (NumberFormatException e){
-            RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/adminEditUser.jsp");
-            dispatcher.forward(req, resp);
-        }
+        Long userId = Long.parseLong(req.getParameter("userId"));
         String name = req.getParameter("login");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
-        User user = new User(user_id, name, pass, email);
+        User user = new User(userId, name, pass, email);
         userService.userEdit(user);
         resp.sendRedirect("/admin");
     }

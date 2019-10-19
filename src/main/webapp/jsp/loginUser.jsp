@@ -3,8 +3,6 @@
          pageEncoding="windows-1251"%>
 <html>
 <body>
-<div class="form-style-2-heading">
-</div>
 <form method="POST" action="/">
     <p><b>Autorization user </b></p>
     <table width="100%" cellspacing="0" cellpadding="4">
@@ -20,7 +18,7 @@
             <td></td>
             <td align="left" width="100">
                 <input type="submit" value="Enter" name="Ok">
-                <input type="submit" value="Registration" name="register" onclick="document.forms[0].action = '/register'; return true;"><br>
+                <button><a href="/register" style="text-decoration: none; color: black;">Registration</a></button>
             </td>
         </tr>
     </table>

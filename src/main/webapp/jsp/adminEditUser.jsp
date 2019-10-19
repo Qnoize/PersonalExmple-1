@@ -3,12 +3,9 @@
 <%@ page language="java" contentType="text/html;charset=windows-1251"
          pageEncoding="windows-1251"%>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-<form method="POST" action="/edit">
-    <p><b>Edit user with Id - ${user.user_id} </b></p>
+<form method="POST" action="/admin/edit">
+    <p><b>Edit user with Id - ${user.userId} </b></p>
     <table width="100%" cellspacing="0" cellpadding="4" items="${requestScope.user}">
         <tr>
             <td align="right" width="100">Login</td>
@@ -26,13 +23,11 @@
             <td></td>
             <td>
                 <input type="submit" value="Confirm" name="Ok">
-                <input type="hidden" name="user_id" value="${user.user_id}">
-                <input type="submit" value="Back to admin" onclick="document.forms[0].action = '/admin'; return true;">
-            </td>
+                <input type="hidden" name="userId" value="${user.userId}">
+                <button><a href="/admin" style="text-decoration: none; color: black;">Back to admin</a></button>
+             </td>
         </tr>
     </table>
-
 </form>
-
 </body>
 </html>

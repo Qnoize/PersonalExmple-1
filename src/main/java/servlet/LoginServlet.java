@@ -21,32 +21,20 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=windows-1251");
-        req.setCharacterEncoding("CP1251");
-
         String name = req.getParameter("login");
         String password = req.getParameter("password");
+        HttpSession session = req.getSession();
+        session.setAttribute("login", name);
 
-        if(req.getParameter("register") != null){
-            req.getServletContext().getRequestDispatcher("/jsp/registerUser.jsp").forward(req, resp);
+        String role = "user";
+        if(userService.getByName(name).getRole().toString().contains("admin")) {
+           role = "admin";
         }
-
-        if (userService.userExist(name, password)) {
-            HttpSession session = req.getSession();
-            session.setAttribute("login", name);
-
-            String role = "user";
-            if((userService.getUserRole(name).getRole_id()) == 2L){
-                role = "admin";
-            }
-            session.setAttribute("role", role);
-            if(!role.equals("admin")) {
-                req.getServletContext().getRequestDispatcher("/jsp/userHome.jsp").forward(req, resp);
-            } else {
-                req.getServletContext().getRequestDispatcher("/admin").forward(req, resp);
-            }
+        session.setAttribute("role", role);
+        if(!role.equals("admin")) {
+            resp.sendRedirect(req.getContextPath() + "/userHome");
         } else {
-            resp.sendRedirect(req.getContextPath() + "/");
+            resp.sendRedirect(req.getContextPath() + "/admin");
         }
     }
 }

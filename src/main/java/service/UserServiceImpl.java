@@ -3,7 +3,6 @@ package service;
 import DAO.UserDao;
 import DAO.UserDaoFactory;
 import model.User;
-import model.UserRole;
 
 import java.util.List;
 
@@ -22,40 +21,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(long user_id){ return userDao.getById(user_id);}
+    public User getUserById(long user_id){ return userDao.getById(user_id); }
 
     @Override
-    public boolean getUserByName(String name, String password){ return userDao.getByName(name, password);}
+    public List<User> getAllUsers(){ return userDao.getAll(); }
 
     @Override
-    public List<User> getAllUsers(){
-        return userDao.getAll();
+    public void userEdit(User user){ userDao.edit(user); }
+
+    @Override
+    public void deleteUser(long user_id) {
+        userDao.delete(user_id);
     }
 
     @Override
-    public void userEdit(User user){
-        userDao.edit(user);
+    public boolean userExistByName(String name){
+        return userDao.isExistUserByName(name);
     }
 
     @Override
-    public void deleteUser(long user_id) { userDao.delete(user_id); }
-
-    @Override
-    public boolean userExistByName(String name){ return getByName(name);}
-
-    @Override
-    public boolean getByName(String name) { return userDao.getByName(name); }
-
-    @Override
-    public boolean userExist(String name, String password) {
-        return getUserByName(name, password);
+    public User getByName(String name) {
+        return userDao.getByName(name);
     }
 
     @Override
-    public void addUser(User user){ if (!userExistByName(user.getName())){ userDao.add(user); } }
+    public boolean userExist(String name, String password) { return userDao.isExistUserByNameAndPassword(name, password); }
 
     @Override
-    public UserRole getUserRole(String name) {
-        return userDao.getUserRole(name);
+    public void addUser(User user) {
+        if (!userExistByName(user.getName())) {
+            userDao.add(user);
+        }
     }
 }

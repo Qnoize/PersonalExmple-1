@@ -22,26 +22,19 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<User> users = userService.getAllUsers();
-        resp.setContentType("text/html; charset=windows-1251");
-        req.setCharacterEncoding("CP1251");
-
         req.setAttribute("list", users);
         RequestDispatcher dispatcher = req.getServletContext().getRequestDispatcher("/jsp/registerUser.jsp");
         dispatcher.forward(req, resp);
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html; charset=windows-1251");
-        req.setCharacterEncoding("CP1251");
-
         String name = req.getParameter("login");
         String pass = req.getParameter("password");
         String email = req.getParameter("email");
-        if (!name.equals("")&& !pass.equals("")) {
+        if (!name.isEmpty()&& !pass.isEmpty()) {
             User user = new User(name, pass, email);
             userService.addUser(user);
-            doGet(req, resp);
         }
-        doGet(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/register");
     }
 }

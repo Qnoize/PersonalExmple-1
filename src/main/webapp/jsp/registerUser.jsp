@@ -2,9 +2,6 @@
 <%@ page language="java" contentType="text/html;charset=windows-1251"
          pageEncoding="windows-1251"%>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
 <form method="POST" action="/register">
     <p><b>Register new User</b></p>
@@ -25,11 +22,10 @@
             <td></td>
             <td>
                 <input type="submit" value="Registration" name="Ok">
-                <input type="submit" value="Back to login"  onclick="document.forms[0].action = '/'; return true;"><br>
+                <button><a href="/" style="text-decoration: none; color: black;">Back to login</a></button>
             </td>
         </tr>
     </table>
-
 </form>
 
 <table table border="1" cellspacing="0" cellpadding="2">
@@ -40,13 +36,11 @@
     </tr>
     <c:forEach items="${requestScope.list}" var="user">
         <tr>
-            <td> ${user.user_id} </td>
+            <td> ${user.userId} </td>
             <td> ${user.name} </td>
             <td> ${user.email} </td>
         </tr>
     </c:forEach>
 </table>
-
 </body>
-
 </html>

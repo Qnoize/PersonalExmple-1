@@ -3,14 +3,9 @@
 <%@ page language="java" contentType="text/html;charset=windows-1251"
          pageEncoding="windows-1251"%>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-
-Work with - ${requestScope.with}
-User - role :  <%= request.getSession().getAttribute("role") %>
-
+Work with - ${requestScope.with}<br>
+User - role :  ${requestScope.userRole}
 <form method="POST" action="/admin">
     <p><b>Add new user</b></p>
     <table width="100%" cellspacing="0" cellpadding="4">
@@ -30,7 +25,7 @@ User - role :  <%= request.getSession().getAttribute("role") %>
             <td></td>
             <td>
                 <input type="submit" value="Add new user" name="Ok">
-                <input type="submit" value="Back to login"  onclick="document.forms[0].action = '/'; return true;"><br>
+                <button><a href="/" style="text-decoration: none; color: black;">Back to login</a></button>
             </td>
         </tr>
     </table>
@@ -45,24 +40,22 @@ User - role :  <%= request.getSession().getAttribute("role") %>
     </tr>
     <c:forEach items="${requestScope.list}" var="user">
         <tr>
-            <td> ${user.user_id} </td>
+            <td> ${user.userId} </td>
             <td> ${user.name} </td>
             <td> ${user.password} </td>
             <td> ${user.email} </td>
             <td>
-                <form method="GET" action="/edit">
+                <form method="GET" action="/admin/edit">
                     <input type="submit" value="Edit" name="edit">
-                    <input type="hidden" name="user_id" value="${user.user_id}">
+                    <input type="hidden" name="userId" value="${user.userId}">
                 </form>
-                <form method="GET" action="/delete">
+                <form method="GET" action="/admin/delete">
                     <input type="submit" value="Delete" name="delete">
-                    <input type="hidden" name="user_id" value="${user.user_id}">
+                    <input type="hidden" name="userId" value="${user.userId}">
                 </form>
             </td>
         </tr>
     </c:forEach>
 </table>
-
 </body>
-
 </html>

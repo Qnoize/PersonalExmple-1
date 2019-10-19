@@ -1,10 +1,11 @@
 package DAO;
 
-import model.UserRole;
+import model.Role;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import model.User;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -23,29 +24,26 @@ public class UserDaoHibernateImpl implements UserDao {
         return instance;
     }
     //language=SQL
-    private final String SQL_SELECT_BY_ID = "FROM User WHERE user_id = :user_id";
+    private final String SQL_SELECT_BY_ID = "FROM User WHERE userId = :userId";
     //language=SQL
     private final String SQL_SELECT_BY_NAME = "FROM User WHERE name = :name";
     //language=SQL
     private final String SQL_SELECT_BY_NAME_AND_PASS = "FROM User WHERE name = :name and password =:password";
     //language=SQL
     private final String SQL_SELECT_ALL = "FROM User";
-    //language=SQL
-    private final String SQL_SELECT_ROLE = "FROM UserRole WHERE user_id  =:user_id ";
 
     @Override
-    public User getById(long user_id) {
+    public User getById(long userId) {
         Session session = sessionFactory.openSession();
-
         User user = session.createQuery(SQL_SELECT_BY_ID, User.class)
-                .setParameter("user_id", user_id)
+                .setParameter("userId", userId)
                 .getSingleResult();
         session.close();
         return user;
     }
 
     @Override
-    public boolean getByName(String name, String password) {
+    public boolean isExistUserByNameAndPassword(String name, String password) {
         Session session = sessionFactory.openSession();
         try {
             User user = session.createQuery(SQL_SELECT_BY_NAME_AND_PASS, User.class)
@@ -70,8 +68,9 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAll() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        List<User> list = new ArrayList<>(session.createQuery(SQL_SELECT_ALL).list());
+        List<User> list = new ArrayList<>();
         try {
+            list = new ArrayList<>(session.createQuery(SQL_SELECT_ALL).list());
             session.getTransaction().commit();
         } catch (Exception e){
             System.out.println("Ошибка получения всех пользователей");
@@ -88,8 +87,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void edit(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.update(session.get(User.class, user.getUser_id()));
         try {
+            session.update(user);
             session.getTransaction().commit();
         } catch (Exception e){
             System.out.println("Ошибка редактирования пользователя");
@@ -102,11 +101,11 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
-    public void delete(long user_id) {
+    public void delete(long userId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.delete(session.get(User.class, user_id));
         try {
+            session.delete(session.get(User.class, userId));
             session.getTransaction().commit();
         } catch (Exception e){
             System.out.println("Ошибка удаения пользователя");
@@ -121,13 +120,14 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public void add(User user) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(user);
-        session.save(new UserRole(user.getUser_id(), 1L));
         try {
+            user.setRole(Collections.singleton(new Role(1L, "user")));
+            session.beginTransaction();
+            session.save(user);
             session.getTransaction().commit();
         } catch (Exception e){
             System.out.println("Ошибка добавления пользователя");
+            e.printStackTrace();
             session.getTransaction().rollback();
         } finally {
             if (session != null && session.isOpen()) {
@@ -137,21 +137,7 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
-    public UserRole getUserRole(String name) {
-        Session session = sessionFactory.openSession();
-
-            User user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
-                    .setParameter("name", name)
-                    .getSingleResult();
-            UserRole userRole = session.createQuery(SQL_SELECT_ROLE, UserRole.class)
-                    .setParameter("user_id", user.getUser_id())
-                    .getSingleResult();
-            session.close();
-            return userRole;
-    }
-
-    @Override
-    public boolean getByName(String name) {
+    public boolean isExistUserByName(String name) {
         Session session = sessionFactory.openSession();
         try {
             User user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
@@ -169,5 +155,27 @@ public class UserDaoHibernateImpl implements UserDao {
             }
         }
         return false;
+    }
+
+    @Override
+    public User getByName(String name) {
+        Session session = sessionFactory.openSession();
+        User user = null;
+        try {
+            user = session.createQuery(SQL_SELECT_BY_NAME, User.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            if(user != null){
+                return user;
+            }
+        } catch (Exception e){
+            System.out.println("Ошибка нахождения по имени пользователя");
+            e.getStackTrace();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return user;
     }
 }

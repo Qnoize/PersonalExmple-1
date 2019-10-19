@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html;charset=windows-1251"
          pageEncoding="windows-1251"%>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-Hello   <%= request.getSession().getAttribute("login") %><br>
-User - role :        <%= request.getSession().getAttribute("role") %>
+Hello  ${requestScope.userLogin}<br>
+User - role :   ${requestScope.userRole}
 </br>
 <form method="POST" action="/userHome">
-    <input type="submit" value="Back to login" name="login" onclick="document.forms[0].action = '/'; return true;"><br>
+    <button><a href="/" style="text-decoration: none; color: black;">Back to login</a></button>
 </form>
 </body>
 </html>

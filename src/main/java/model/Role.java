@@ -2,45 +2,42 @@ package model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-@Table(name = "role_table")
+@Table(name = "roleTable")
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "role_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long role_id;
+    @Column(name = "roleId")
+    private Long roleId;
 
     @Column(name = "role")
     private String role;
 
-    public Role(Long role_id, String role) {
-        this.role_id = role_id;
+    public Role(Long roleId, String role) {
+        this.roleId = roleId;
         this.role = role;
     }
 
     @ManyToMany
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users = new ArrayList<>();
+            name = "userRole",
+            joinColumns = @JoinColumn(name = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"))
+    private Set<User> users = new HashSet<>();
 
-    public Long getRole_id() {
-        return role_id;
+    public Long getRoleId() {
+        return roleId;
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole_id(Long role_id) {
-        this.role_id = role_id;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public void setRole(String role) {
@@ -53,24 +50,28 @@ public class Role implements Serializable {
 
     public Role() { }
 
+    public Set<User> getUsers() { return users; }
+
+    public void setUsers(Set<User> users) { this.users = users; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Role)) return false;
         Role role1 = (Role) o;
-        return Objects.equals(role_id, role1.role_id) &&
+        return Objects.equals(roleId, role1.roleId) &&
                 Objects.equals(role, role1.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(role_id, role);
+        return Objects.hash(roleId, role);
     }
 
     @Override
     public String toString() {
         return "Role{" +
-                "id=" + role_id +
+                "id=" + roleId +
                 ", role='" + role + '\'' +
                 '}';
     }

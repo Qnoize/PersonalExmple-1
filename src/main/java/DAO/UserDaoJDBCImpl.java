@@ -1,7 +1,7 @@
 package DAO;
 
 import model.User;
-import model.UserRole;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +21,27 @@ public class UserDaoJDBCImpl implements UserDao {
         return instance;
     }
     //language=SQL
-    private final String SQL_GET_BY_ID = "SELECT * FROM user_table WHERE user_id = ?";
+    private final String SQL_GET_BY_ID = "SELECT * FROM userTable WHERE userId = ?";
     //language=SQL
-    private final String SQL_GET_BY_NAME = "SELECT * FROM user_table WHERE name = ?";
+    private final String SQL_GET_BY_NAME = "SELECT * FROM userTable WHERE name = ?";
     //language=SQL
-    private final String SQL_GET_ROLE = "SELECT * FROM user_role WHERE user_id = ?";
+    private final String SQL_GET_ROLE = "SELECT * FROM userRole WHERE user_id = ?";
     //language=SQL
-    private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM user_table WHERE name = ? AND password = ?";
+    private final String SQL_GET_BY_NAME_AND_PASS = "SELECT * FROM userTable WHERE name = ? AND password = ?";
     //language=SQL
-    private final String SQL_SELECT_ALL = "SELECT * FROM user_table";
+    private final String SQL_SELECT_ALL = "SELECT * FROM userTable";
     //language=SQL
-    private final String SQL_EDIT = "UPDATE user_table SET name = ?, password = ?, email = ? WHERE user_id = ?";
+    private final String SQL_EDIT = "UPDATE userTable SET name = ?, password = ?, email = ? WHERE userId = ?";
     //language=SQL
-    private final String SQL_ADD = "INSERT INTO user_table (name, password, email) VALUES (?, ?, ?)";
+    private final String SQL_ADD = "INSERT INTO userTable (name, password, email) VALUES (?, ?, ?)";
     //language=SQL
-    private final String SQL_ADD_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+    private final String SQL_ADD_ROLE = "INSERT INTO userRole (user_id, role_id) VALUES (?, ?)";
     //language=SQL
     private final String SQL_CREATE_TABLE = "CREATE TABLE if NOT EXISTS user_table (id bigint auto_increment, NAME VARCHAR(256), password VARCHAR(256), email VARCHAR(256), PRIMARY KEY (id))";
     //language=SQL
-    private final String SQL_DELETE_IN_TABLE = "DELETE FROM user_table WHERE user_id = ?";
+    private final String SQL_DELETE_IN_TABLE = "DELETE FROM userTable WHERE userId = ?";
     //language=SQL
-    private final String SQL_DELETE_ROLE = "DELETE FROM user_role WHERE user_id = ?";
+    private final String SQL_DELETE_ROLE = "DELETE FROM userRole WHERE user_id = ?";
 
     @Override
     public List<User> getAll(){
@@ -71,7 +71,7 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_EDIT);
-            preparedStatement.setLong(4, user.getUser_id());
+            preparedStatement.setLong(4, user.getUserId());
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getEmail());
@@ -107,7 +107,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     @Override
-    public boolean getByName(String name, String password) {
+    public boolean isExistUserByNameAndPassword(String name, String password) {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME_AND_PASS);
@@ -124,6 +124,13 @@ public class UserDaoJDBCImpl implements UserDao {
         }
         return false;
     }
+
+    @Override
+    public boolean isExistUserByName(String name) { return false; }
+
+    @Override
+    public User getByName(String name) { return null; }
+
     @Override
     public void add(User user){
         PreparedStatement preparedStatement;
@@ -156,7 +163,7 @@ public class UserDaoJDBCImpl implements UserDao {
             resultSet.close();
             preparedStatement.close();
             preparedStatement = connection.prepareStatement(SQL_ADD_ROLE);
-            preparedStatement.setLong(1, userId.getUser_id());
+            preparedStatement.setLong(1, userId.getUserId());
             preparedStatement.setLong(2, 1L);
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -165,10 +172,10 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    @Override
-    public UserRole getUserRole(String name) {
+
+    public User getUserRole(String name) {
         PreparedStatement preparedStatement;
-        UserRole userRole = null;
+        User userRole = null;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
             preparedStatement.setString(1, name);
@@ -184,12 +191,12 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.close();
 
             preparedStatement = connection.prepareStatement(SQL_GET_ROLE);
-            preparedStatement.setLong(1, user.getUser_id());
+            preparedStatement.setLong(1, user.getUserId());
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
                 Long idu = resultSet.getLong("user_id");
                 Long idr = resultSet.getLong("role_id");
-                userRole = new UserRole(idu, idr);
+                user = new User(idu, idr);
             }
             resultSet.close();
             preparedStatement.close();
@@ -199,8 +206,8 @@ public class UserDaoJDBCImpl implements UserDao {
         return userRole;
     }
 
-    @Override
-    public boolean getByName(String name) {
+
+    public boolean isExistUserByNameAndPassword(String name) {
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_BY_NAME);
