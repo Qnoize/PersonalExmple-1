@@ -23,14 +23,16 @@ public class AdminFilter implements Filter{
 
         try {
             HttpSession session = request.getSession(false);
-            if(session != null){
-                if (session.getAttribute("role").equals("admin")) {
-                    chain.doFilter(request, response);
-                }
+            if (session != null && session.getAttribute("role").equals("admin")) {
+                chain.doFilter(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/");
             }
-            response.sendRedirect(request.getContextPath() + "/");
+            return;
         } catch (Exception e){
-            response.sendRedirect(request.getContextPath() + "/");
+            e.printStackTrace();
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/jsp/loginUser.jsp");
+            dispatcher.forward(request, response);
         }
     }
     @Override

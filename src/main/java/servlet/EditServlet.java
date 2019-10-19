@@ -38,6 +38,6 @@ public class EditServlet extends HttpServlet {
         String email = req.getParameter("email");
         User user = new User(userId, name, pass, email);
         userService.userEdit(user);
-        resp.sendRedirect("/admin");
+        resp.sendRedirect(req.getContextPath() + "/admin");
     }
 }

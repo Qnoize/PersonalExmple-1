@@ -42,6 +42,6 @@ public class AdminServlet extends HttpServlet {
             User user = new User(name, pass, email);
             userService.addUser(user);
         }
-        resp.sendRedirect(req.getContextPath() + "/");
+        resp.sendRedirect(req.getContextPath() + "/admin");
     }
 }

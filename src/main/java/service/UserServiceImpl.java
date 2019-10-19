@@ -40,9 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByName(String name) {
-        return userDao.getByName(name);
-    }
+    public User getByName(String name) { return userDao.getByName(name); }
 
     @Override
     public boolean userExist(String name, String password) { return userDao.isExistUserByNameAndPassword(name, password); }
