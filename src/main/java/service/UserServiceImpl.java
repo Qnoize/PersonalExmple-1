@@ -2,8 +2,10 @@ package service;
 
 import DAO.UserDao;
 import DAO.UserDaoFactory;
+import model.Role;
 import model.User;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user) {
         if (!userExistByName(user.getName())) {
+            user.setRole(Collections.singleton(new Role(1L, "user")));
             userDao.add(user);
         }
     }

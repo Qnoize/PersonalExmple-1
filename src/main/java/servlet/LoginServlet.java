@@ -27,9 +27,10 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("login", name);
 
         String role = "user";
-        if(userService.getByName(name).getRole().toString().contains("admin")) {
-           role = "admin";
+        if(userService.getByName(name).getRole().toString().contains("admin")){
+            role = "admin";
         }
+
         session.setAttribute("role", role);
         if(!role.equals("admin")) {
             resp.sendRedirect(req.getContextPath() + "/userHome");

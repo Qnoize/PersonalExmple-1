@@ -48,8 +48,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public <T> User(T t) { }
-
     public User(Long userId, long l) { }
 
     public Long getUserId() { return userId; }

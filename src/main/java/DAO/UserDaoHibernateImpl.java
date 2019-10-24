@@ -121,7 +121,6 @@ public class UserDaoHibernateImpl implements UserDao {
     public void add(User user) {
         Session session = sessionFactory.openSession();
         try {
-            user.setRole(Collections.singleton(new Role(1L, "user")));
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
